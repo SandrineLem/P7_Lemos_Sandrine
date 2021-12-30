@@ -10,6 +10,6 @@ server.get('/', function (req, res){
 });
 
 //ecoute du server 
-server.listen(8080, function(){
+server.listen(3306, function(){
     console.log('server en ecoute')
 });
