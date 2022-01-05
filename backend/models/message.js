@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: {
           allowNull: false
         }
-      })
-    }
+      });
+    };
   };
   Message.init({
     idUSERS: DataTypes.INTEGER,

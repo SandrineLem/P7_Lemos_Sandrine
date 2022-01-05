@@ -1,0 +1,23 @@
+{
+  "development": {
+      "username": "keiwa_sandrine",
+      "password": "Sandrine@2021",
+      "database": "keiwa_sandrine_database_development_2",
+      "host": "mysql-keiwa.alwaysdata.net",
+      "dialect": "mysql"
+  },
+  "test": {
+      "username": "root",
+      "password": "PrysSandrineAthosPakitoDiablo",
+      "database": "database_test",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+  },
+  "production": {
+      "username": "root",
+      "password": "PrysSandrineAthosPakitoDiablo",
+      "database": "database_production",
+      "host": "127.0.0.1",
+      "dialect": "mysql"
+  }
+}
