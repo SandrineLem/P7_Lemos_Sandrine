@@ -5,13 +5,19 @@ console.log(error);*/
 
 const bcrypt = require ('bcrypt');
 const jwt = require('jsonwebtoken');
-const models = require('../models');
+const models = require('../models/user');
 const utils = require('../utils/jwtutils');
 const verifInput = require ('../utils/InputVerifUtils');
 
 
 
-//--creation d'un utilisateur 
+/*--creation d'un utilisateur
+        -verification du contenu inscrit par l'utilisateur
+        -champs non vide 
+        -champs valide avec la verif des inputs
+        -si nx utilisateur crypt du mdp + creation nx model user
+        -sinon message d'erreur 
+*/
 
 exports.signup = (req, res, next) => {
     const username = req.body.username;
@@ -37,7 +43,7 @@ exports.signup = (req, res, next) => {
         })
         .then(user => {
             if(!user){
-                bcrypt.hash(password, 10, function ( err, bcryptPassword){
+                bcrypt.hash(password, 10, function (error, bcryptPassword){
                     const newUser = models.User.create({
                         username: username,
                         firstname: firstname,
@@ -47,8 +53,8 @@ exports.signup = (req, res, next) => {
                     })
                     console.log(newUser)
                     .then(newUser => {
-                        res.status(201).json({'id': newUser.id}) })
-                    .catch(err => {
+                        res.status(201).json({ 'id': newUser.id }) })
+                    .catch(error => {
                         res.status(500).json({ error })
                     })
                 })
@@ -56,12 +62,13 @@ exports.signup = (req, res, next) => {
                 res.status(409).json({ error: 'Utilisateur existe déjà !'})
             }
         })
-        .catch (err => {
+        .catch (error => {
             res.status(500).json ({ error })
         })
     }
 };
-//---Afficher le profile du compte de l'utilisateur 
+/*--Afficher le profil du compte de l'utilisateur
+*/ 
 
 exports.userProfil = (req, res, next) =>{
     const id = utils.getUserId(req.headers.authorization)
@@ -79,14 +86,14 @@ exports.login = (res, req, next)=> {
     const username = req.body.username;
     const password = req.body.password;
     if ( username == null || password == null ){
-        res.status(400).json({ error : 'Parametre manquant'})
+        res.status(400).json({ error : 'Parametre manquant !'})
     }
     models.User.findOne({
         where: { username: username }
     })
     .then(user =>{
         if (user){
-            bcrypt.compare(password, user.password, (errComparePassword, resComparePassword) =>{
+            bcrypt.compare(password, user.password, (resComparePassword) =>{
                 if (resComparePassword){
                     res.status(200).json({
                         userId : user.id,
@@ -104,42 +111,45 @@ exports.login = (res, req, next)=> {
     .catch(err => { res.status(500).json({ error }) })
 };
 
-//---modifier le compte  de l'utilisateur 
-
+/*---modifier le compte  de l'utilisateur---
+    -Récup l'id de l'user et le nouveau mdp
+    -verif avec regex de l'input saisie par l'utilisateur
+    -Vérifie si différent de l'ancien
+*/
 exports.changeProfile = (req, res) => {
     
-    //Récup l'id de l'user et le nouveau password
+    
     const userId = utils.getUserId(req.headers.authorization);
     const newPassword = req.body.newPassword;
     console.log(newPassword)
-    //Vérification regex du nouveau mot de passe
+
     console.log('admin', verifInput.validPassword(newPassword))
     if (verifInput.validPassword(newPassword)) {
-        //Vérifie si différent de l'ancien
+        
         models.User.findOne({
             where: { id: userId }
         })
             .then(user => {
                 console.log('user trouvé', user)
-                bcrypt.compare(newPassword, user.password, (errComparePassword, resComparePassword) => {
+                bcrypt.compare(newPassword, user.password, (resComparePassword) => {
                     //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
                     if (resComparePassword) {
-                        res.status(406).json({ error: 'Vous avez entré le même mot de passe' })
+                        res.status(406).json({ error: 'Saisie du même mot de passe !' })
                     } else {
-                        bcrypt.hash(newPassword, 10, function (err, bcryptNewPassword) {
+                        bcrypt.hash(newPassword, 10, function ( bcryptNewPassword) {
                             models.User.update(
                                 { password: bcryptNewPassword },
                                 { where: { id: user.id } }
                             )
-                                .then(() => res.status(201).json({ confirmation: 'mot de passe modifié avec succès' }))
-                                .catch(err => res.status(500).json(err))
+                                .then(() => res.status(201).json({ confirmation: 'modification mot de passe effectuée !' }))
+                                .catch(error => res.status(500).json(error))
                         })
                     }
                 })
             })
             .catch(err => json(err))
     } else {
-        res.status(406).json({ error: 'mot de passe non valide' })
+        res.status(406).json({ error: 'mot de passe incorrect !' })
     }
 };
 
@@ -178,6 +188,6 @@ exports.deleteProfile = (req, res) => {
                 }
             })
     } else {
-        res.status(500).json({ error: 'Impossible de supprimer ce compte, contacter un administrateur' })
+        res.status(500).json({ error: 'Ce compte ne peut être supprimé, veuillez contacter un administrateur' })
     }
 };
