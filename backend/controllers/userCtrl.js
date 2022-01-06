@@ -4,7 +4,6 @@ error.http_code = 404;
 console.log(error);*/
 
 const bcrypt = require ('bcrypt');
-const jwt = require('jsonwebtoken');
 const models = require('../models/user');
 const utils = require('../utils/jwtutils');
 const verifInput = require ('../utils/InputVerifUtils');
@@ -25,46 +24,57 @@ exports.signup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
-    if (username == null || firstname == null || email == null || password == null){
-        res.status(400).json ( { error : 'Paramètre manquant !'})
+    if (
+        username == null ||
+        firstname == null ||
+        email == null ||
+        password == null
+    ) {
+        res.status(400).json({ error: "Paramètre manquant !" });
     }
-    const usernameOk = verifInput.validUsername(username)
-    console.log(usernameOk)
-    const firstnameOk = verifInput.validFirstname(firstname)
-    console.log(firstnameOk)
+    const usernameOk = verifInput.validUsername(username);
+    console.log(usernameOk);
+    const firstnameOk = verifInput.validFirstname(firstname);
+    console.log(firstnameOk);
     const emailOk = verifInput.validEmail(email);
-    console.log(emailOk)
+    console.log(emailOk);
     const mdpOk = verifInput.validPassword(password);
-    console.log(mdpOk)
-    
-    if (usernameOk == true && firstname == true && emailOk == true && mdpOk == true){
+    console.log(mdpOk);
+
+    if (
+        usernameOk == true &&
+        firstnameOk == true &&
+        emailOk == true &&
+        mdpOk == true
+    ) {
         models.User.findOne({
-            attibutes:{email: email}
-        })
-        .then(user => {
-            if(!user){
-                bcrypt.hash(password, 10, function (error, bcryptPassword){
-                    const newUser = models.User.create({
-                        username: username,
-                        firstname: firstname,
-                        email : email,
-                        password : bcryptPassword,
-                        isAdmin: false
-                    })
-                    console.log(newUser)
-                    .then(newUser => {
-                        res.status(201).json({ 'id': newUser.id }) })
-                    .catch(error => {
-                        res.status(500).json({ error })
-                    })
-                })
-            }else{
-                res.status(409).json({ error: 'Utilisateur existe déjà !'})
-            }
-        })
-        .catch (error => {
-            res.status(500).json ({ error })
-        })
+                attibutes: { email: email },
+            })
+            .then((user) => {
+                console.log(user);
+                if (!user) {
+                    bcrypt.hash(password, 10).then((bcryptPassword) => {
+                        models.User.create({
+                                username: username,
+                                firstname: firstname,
+                                email: email,
+                                password: bcryptPassword,
+                                isAdmin: false,
+                            })
+                            .then((newUser) => {
+                                res.status(201).json({ id: newUser.id });
+                            })
+                            .catch((error) => {
+                                res.status(500).json({ error });
+                            });
+                    });
+                } else {
+                    res.status(409).json({ error: "Utilisateur existe déjà !" });
+                }
+            })
+            .catch((error) => {
+                res.status(500).json({ error });
+            });
     }
 };
 /*--Afficher le profil du compte de l'utilisateur
@@ -80,20 +90,27 @@ exports.userProfil = (req, res, next) =>{
     .catch(error => res.status(500).json(error))
 };
 
-//--connexion utilisateur 
+/*--connexion utilisateur
+    -recup des parametre email mdp
+    - verif des champs 
+    -verif si l'email existe déjà
+    -Si on trouve l'utilisateur vrif mdp
+    -comparer le mdp salé ds la bdd avec le mdp saisie
+*/ 
 
 exports.login = (res, req, next)=> {
-    const username = req.body.username;
+    const email = req.body.email;
     const password = req.body.password;
-    if ( username == null || password == null ){
+    if ( email == null || password == null ){
         res.status(400).json({ error : 'Parametre manquant !'})
     }
     models.User.findOne({
-        where: { username: username }
+        where: { email: email }
     })
-    .then(user =>{
-        if (user){
-            bcrypt.compare(password, user.password, (resComparePassword) =>{
+    
+    .then((userFound) =>{
+        if (userFound){
+            bcrypt.compare(password, userFound.password, (resComparePassword) =>{
                 if (resComparePassword){
                     res.status(200).json({
                         userId : user.id,
@@ -108,7 +125,7 @@ exports.login = (res, req, next)=> {
             res.status(404).json ({ error : ' Utilisateur inconnu !' })
         }
     })
-    .catch(err => { res.status(500).json({ error }) })
+    .catch(error => { res.status(500).json({ error }) })
 };
 
 /*---modifier le compte  de l'utilisateur---
@@ -147,7 +164,7 @@ exports.changeProfile = (req, res) => {
                     }
                 })
             })
-            .catch(err => json(err))
+            .catch(error => json(error))
     } else {
         res.status(406).json({ error: 'mot de passe incorrect !' })
     }
