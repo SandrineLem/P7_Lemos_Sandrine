@@ -107,31 +107,30 @@ exports.login = (req, res, next) => {
         res.status(400).json({ error: "Parametre manquant !" });
     }
     models.User.findOne({
-            where: { email: email },
+            where: { email: email }
         })
-        .then((user) => {
+        .then(user => {
             if (user) {
                 console.log(user)
                 console.log(user.password)
                 console.log(password)
-                bcrypt.compare(password, user.password, (resComparePassword) => {
+                bcrypt.compare(password, user.password, (errrorCompPawd, resComparePassword) => {
                     if (resComparePassword) {
                         res.status(200).json({
                             userId: user.id,
-                            token: utils.generateTokenForUser(user),
+                            token: utils.generateToken(user),
                             isAdmin: user.isAdmin,
-                        });
+                        })
                     } else {
                         res.status(403).json({ error: "Mot de passe incorrect !" });
-                    }
-                });
+                    };
+                })
             } else {
                 res.status(404).json({ error: " Utilisateur inconnu !" });
             }
         })
-        .catch((error) => {
-            res.status(500).json({ error });
-        });
+        .catch((error) => {res.status(500).json({ error });
+        })             
 };
 
 /*---modifier le compte  de l'utilisateur---
