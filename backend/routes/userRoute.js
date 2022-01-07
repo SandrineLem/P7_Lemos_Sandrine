@@ -6,7 +6,7 @@ const userCtrl = require('../controllers/userCtrl');
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 router.get('/myprofil', userCtrl.userProfil);
-router.delete('/delete', userCtrl.deleteProfile);
-router.put('/update', userCtrl.changeProfile);
+router.delete('/delete', userCtrl.deleteProfil);
+router.put('/update', userCtrl.changeProfil);
 
 module.exports = router;

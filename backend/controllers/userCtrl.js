@@ -1,7 +1,7 @@
-/*--m'informer des erreurs 
+/*--m'informer des erreurs */
 var error = new Error("The error message");
 error.http_code = 404;
-console.log(error);*/
+console.log(error);
 
 const bcrypt = require("bcrypt");
 const models = require("../models");
@@ -76,18 +76,9 @@ exports.signup = (req, res, next) => {
     }
 
 };
-/*--Afficher le profil du compte de l'utilisateur
- */
 
-exports.userProfil = (req, res, next) => {
-    const id = utils.getUserId(req.headers.authorization);
-    models.User.findOne({
-            attributes: ["id", "username", "isAdmin"],
-            where: { id: id },
-        })
-        .then((user) => res.status(200).json(user))
-        .catch((error) => res.status(500).json(error)); 
-};
+    
+
 
 
 /*--connexion utilisateur
@@ -133,30 +124,50 @@ exports.login = (req, res, next) => {
         })             
 };
 
+
+/*--Afficher le profil du compte de l'utilisateur
+ */
+
+exports.userProfil = (req, res, next) => {
+    const id = utils.getUserId(req.headers.authorization)
+
+    models.User.findOne({
+            attributes: ["id", 'email', "username", "isAdmin"],
+            where: { id: id }
+        })
+        .then(user => res.status(200).json(user))
+        .catch(error => res.status(500).json(error))
+};
+
+
+
 /*---modifier le compte  de l'utilisateur---
     -Récup l'id de l'user et le nouveau mdp
     -verif avec regex de l'input saisie par l'utilisateur
     -Vérifie si différent de l'ancien
+    -mettre a jour 
 */
-exports.changeProfile = (req, res) => {
+exports.changeProfil = (req, res, next) => {
     const userId = utils.getUserId(req.headers.authorization);
     const newPassword = req.body.newPassword;
     console.log(newPassword);
 
-    console.log("admin", verifInput.validPassword(newPassword));
+    
     if (verifInput.validPassword(newPassword)) {
         models.User.findOne({
                 where: { id: userId },
             })
-            .then((user) => {
+            .then(user => {
                 console.log("user trouvé", user);
-                bcrypt.compare(newPassword, user.password, (resComparePassword) => {
+                bcrypt.compare(newPassword, user.password, (errrorCompPawd, resComparePassword) => {
                     //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
                     if (resComparePassword) {
                         res.status(406).json({ error: "Saisie du même mot de passe !" });
                     } else {
-                        bcrypt.hash(newPassword, 10, function(bcryptNewPassword) {
-                            models.User.update({ password: bcryptNewPassword }, { where: { id: user.id } })
+                        bcrypt.hash(newPassword, 10, function(error, bcryptNewPassword) {
+                            models.User.update(
+                                { password: bcryptNewPassword },
+                                { where: { id: user.id } })
                                 .then(() =>
                                     res.status(201).json({
                                         confirmation: "modification mot de passe effectuée !",
@@ -167,7 +178,7 @@ exports.changeProfile = (req, res) => {
                     }
                 });
             })
-            .catch((err) => json(err));
+            .catch((error) => json(error));
     } else {
         res.status(406).json({ error: "mot de passe incorrect !" });
     }
@@ -175,23 +186,21 @@ exports.changeProfile = (req, res) => {
 
 //--Supprimer un compte utilisateur
 
-exports.deleteProfile = (req, res) => {
+exports.deleteProfil = (req, res) => {
     //récup de l'id de l'user
     let userId = utils.getUserId(req.headers.authorization);
     if (userId != null) {
         //Recherche sécurité si user existe bien
         models.User.findOne({
             where: { id: userId },
-        }).then((user) => {
+        }).then(user => {
             if (user != null) {
                 //Delete de tous les posts de l'user même s'il y en a pas
-                models.Post.destroy({
+                models.Message.destroy({
                         where: { userId: user.id },
                     })
                     .then(() => {
-                        console.log(
-                            "Tous les messages de cette utilisateurs ont été supprimé"
-                        );
+                        console.log("Tous les messages de cette utilisateurs ont été supprimé");
                         //Suppression de l'utilisateur
                         models.User.destroy({
                                 where: { id: user.id },
