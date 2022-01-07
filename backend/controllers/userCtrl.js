@@ -4,7 +4,6 @@ error.http_code = 404;
 console.log(error);*/
 
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const models = require("../models");
 const utils = require("../utils/jwtutils");
 const verifInput = require("../utils/InputVerifUtils");
@@ -75,6 +74,7 @@ exports.signup = (req, res, next) => {
                 res.status(500).json({ error });
             });
     }
+
 };
 /*--Afficher le profil du compte de l'utilisateur
  */
@@ -86,7 +86,7 @@ exports.userProfil = (req, res, next) => {
             where: { id: id },
         })
         .then((user) => res.status(200).json(user))
-        .catch((error) => res.status(500).json(error));
+        .catch((error) => res.status(500).json(error)); 
 };
 
 
@@ -99,18 +99,21 @@ exports.userProfil = (req, res, next) => {
     -comparer le mdp salé ds la bdd avec le mdp saisie
 */
 
-exports.login = (res, req, next) => {
-    const username = req.body.username;
+exports.login = (req, res, next) => {
+    const email = req.body.email;
+    console.log(email)
     const password = req.body.password;
-    if (username == null || password == null) {
+    if (email === null || password === null) {
         res.status(400).json({ error: "Parametre manquant !" });
     }
     models.User.findOne({
-            where: { username: username },
+            where: { email: email },
         })
         .then((user) => {
             if (user) {
                 console.log(user)
+                console.log(user.password)
+                console.log(password)
                 bcrypt.compare(password, user.password, (resComparePassword) => {
                     if (resComparePassword) {
                         res.status(200).json({
@@ -126,7 +129,7 @@ exports.login = (res, req, next) => {
                 res.status(404).json({ error: " Utilisateur inconnu !" });
             }
         })
-        .catch((err) => {
+        .catch((error) => {
             res.status(500).json({ error });
         });
 };
