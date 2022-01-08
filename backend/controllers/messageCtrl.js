@@ -31,7 +31,7 @@ exports.allMessage = (req, res, next) =>{
 
 
 exports.getOneMessage = (req, res, next) =>{
-    const id = utils.getUserId(req.headers.authorization)
+    const id = req.params.id;
     models.Message.findOne({
         attributes: ["id", 'titlte', "content", "attachnment", "likes"],
         where: { id: id }
@@ -49,7 +49,10 @@ exports.getOneMessage = (req, res, next) =>{
     -creer le message 
 */
 exports.createMessage = (req, res, next) => {
-    const id = utils.getUserId(req,Headers.authorization)
+    const userId = req.body.userId;
+    const titlte = req.body.titlte;
+    const attachmentURL = '';
+
 
     models.User.findOne({
         attributes : ['id', 'email', 'username'],
@@ -58,7 +61,7 @@ exports.createMessage = (req, res, next) => {
     .then(user =>{
         if(user !== null){
             const content = req.body.content;
-        if(req.file != undefined){
+        if(req.body.file != undefined){
             attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
         }
         else{
@@ -72,7 +75,7 @@ exports.createMessage = (req, res, next) => {
                 content: content,
                 attachmentURL: attachmentURL,
                 likes: 0,
-                UserId: user.id
+                UserId: userId
             })
             .then((newMessage) =>{
                 res.status(201).json(newMessage)
