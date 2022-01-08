@@ -1,7 +1,7 @@
-/*--m'informer des erreurs */
+/*--m'informer des erreurs 
 var error = new Error("The error message");
 error.http_code = 404;
-console.log(error);
+console.log(error);*/
 
 const bcrypt = require("bcrypt");
 const models = require("../models");
@@ -129,8 +129,8 @@ exports.login = (req, res, next) => {
  */
 
 exports.userProfil = (req, res, next) => {
-    const id = utils.getUserId(req.headers.authorization)
-
+    const id = req.params.id;
+    console.log(id)
     models.User.findOne({
             attributes: ["id", 'email', "username", "isAdmin"],
             where: { id: id }
@@ -148,14 +148,14 @@ exports.userProfil = (req, res, next) => {
     -mettre a jour 
 */
 exports.changeProfil = (req, res, next) => {
-    const userId = utils.getUserId(req.headers.authorization);
+    const id = req.params.id;
     const newPassword = req.body.newPassword;
     console.log(newPassword);
 
     
     if (verifInput.validPassword(newPassword)) {
         models.User.findOne({
-                where: { id: userId },
+                where: { id: id },
             })
             .then(user => {
                 console.log("user trouvé", user);
@@ -167,7 +167,7 @@ exports.changeProfil = (req, res, next) => {
                         bcrypt.hash(newPassword, 10, function(error, bcryptNewPassword) {
                             models.User.update(
                                 { password: bcryptNewPassword },
-                                { where: { id: user.id } })
+                                { where: { id: id } })
                                 .then(() =>
                                     res.status(201).json({
                                         confirmation: "modification mot de passe effectuée !",
@@ -188,22 +188,22 @@ exports.changeProfil = (req, res, next) => {
 
 exports.deleteProfil = (req, res) => {
     //récup de l'id de l'user
-    let userId = utils.getUserId(req.headers.authorization);
-    if (userId != null) {
+    const id = req.params.id;
+    if (id != null) {
         //Recherche sécurité si user existe bien
         models.User.findOne({
-            where: { id: userId },
+            where: { id: id },
         }).then(user => {
             if (user != null) {
                 //Delete de tous les posts de l'user même s'il y en a pas
                 models.Message.destroy({
-                        where: { userId: user.id },
+                        where: { idUSERS: id },
                     })
                     .then(() => {
                         console.log("Tous les messages de cette utilisateurs ont été supprimé");
                         //Suppression de l'utilisateur
                         models.User.destroy({
-                                where: { id: user.id },
+                                where: { id: id},
                             })
                             .then(() => res.end())
                             .catch((err) => console.log(err));

@@ -8,6 +8,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 const userRoute = require('./routes/userRoute');
+const messageRoute = require('./routes/messageRoute');
+
 app.use(express.json());
 //donner accès au chemin du syteme de fichier
 const path = require('path');
@@ -24,5 +26,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use('/api/user', userRoute);
 //importer la route message --!!!!!!
+app.use('/api/message', messageRoute);
 
 module.exports = app;
