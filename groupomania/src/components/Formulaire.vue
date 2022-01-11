@@ -24,11 +24,11 @@
             <div class="form-row">
                 <button @click="login()" class="button" :class="{'button--disabled' : !validatedFields}"  v-if="mode == 'login'">
                     <span v-if="status == 'loading' ">Connexion en cours...</span> 
-                    <span v-else>Connexion</span>  
+                    <span v-else @click="logout()">Connexion</span>  
                 </button>
                 <button @click="createAccount()" class="button" :class="{'button--disabled' : !validatedFields}" v-else>
                     <span v-if="status == 'loading' ">Création en cours...</span>
-                    <span v-else>Créer mon compte</span> 
+                    <span v-else @click="logout()">Créer mon compte</span> 
                 </button>  
             </div>
         </div>
@@ -75,6 +75,10 @@ import {mapState } from 'vuex'
             ...mapState (['status'])
         },
         methods:{
+            logout: function(){
+            this.$store.commit('logout');
+            this.$router.push('/');
+        },
             switchToCreateAccount: function() {
                 this.mode = 'create';
             },
