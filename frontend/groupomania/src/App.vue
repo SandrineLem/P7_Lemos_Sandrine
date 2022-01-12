@@ -114,3 +114,12 @@ img{
 }
 
 </style>
+<style scoped>
+@media (min-width:800px) and (max-width:780px){
+  * {
+    max-width: 750px;
+    margin: none;
+  }
+
+}
+</style>

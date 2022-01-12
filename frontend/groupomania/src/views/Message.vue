@@ -124,4 +124,11 @@ max-width: 100%;
 }
 
 }
+@media screen and (min-width:800px) and (max-width:780px){
+.filActualite{
+    max-width: 780px;
+    align-content: center;
+}
+
+}
 </style>

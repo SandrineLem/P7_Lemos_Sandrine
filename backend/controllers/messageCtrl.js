@@ -5,6 +5,8 @@ console.log(error);*/
 const utils = require("../utils/jwtUtils");
 const models = require("../models");
 const fs = require('fs');
+const Message = require('../models/message');
+
 
 /* --recuperer tous les messages
    -chercher tous les model de message des utilisateur avec firstname 
@@ -31,17 +33,18 @@ exports.allMessage = (req, res, next) =>{
 
 
 exports.getOneMessage = (req, res, next) =>{
-    const id = req.params.id;
-    models.Message.findOne({
-        attributes: ["id", 'titlte', "content", "attachnment", "likes"],
-        where: { id: id }
-    })
+    
+    models.Message.findOne({ userId: req.params.userId})
     .then(message => res.status(200).json(message))
-    .catch(error => res.status(500).json(error))
+    .catch(error => res.status(404).json ({ error }));
 };
+
     
 
 
+/* --Creer un message 
+    
+*/
 /* --Creer un message 
     -identifier le createur du message avec l'id de l'utilisateur
     -recuperer le contenu 
@@ -56,7 +59,7 @@ exports.createMessage = (req, res, next) => {
 
     models.User.findOne({
         attributes : ['id', 'email', 'username'],
-        where: { id: id }
+        where: { userId: userId }
     })
     .then(user =>{
         if(user !== null){
@@ -89,22 +92,19 @@ exports.createMessage = (req, res, next) => {
         }
         
     })
-    .catch(error.status(500).json(error));
+    .catch(error => res.status(500).json(error));
 };
 
 /*--Supprimer un message*/
 
 exports.deleteMessage = (req, res, next) => {
-    const id = utils.getUserId(req.headers.authorization)
-    console.log(id)
+    Message.findOne({ id: req.params.id })
 
-    Message.findOne({id: req.params.id})
-
-    .then( message =>{
+    .then(message =>{ 
         const filename = message.attachmentURL.split('/images')[1];
-        fs.unlink(`images/${filename}`, () =>{
-            Message.deleteOne({id: req.params.id})
-            .then(() => res.status(200).json({message: 'Message supprimé !'}))
+        fs.unlink(`images/${filename}`, () => {
+            Message.deleteOne({ id: req.params.id })
+            .then(() => res.status(200).json({ message: 'Message supprimé !'}))
             .catch(error => res.status(400).json({ error }))
         })
     })
@@ -115,13 +115,38 @@ exports.deleteMessage = (req, res, next) => {
  */
 
 exports.modifyMessage = (req, res, next) => {
-    const id = utils.getUserId(req.headers.authorization)
     const messageObjet = req.file ?
     {
         ...JSON.parse(req.body.message),
-        attachmentURL: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-    } : { ...req.body};
-    Message.updateOne({ id: req.params.id}, {...messageObjet, id: req.params.id})
-    .then(() =>res.status(200).json ({ message: 'Le message à bien été modifié !'}))
-    .catch(error => res.status(400).json({ error}))
-}
+        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+
+    } : { ...req.body };
+    Message.updateOne({ userId: params.userId}, { ...messageObjet, id: req.params.id})
+    .then(() => res.status(200).json ({ message: 'Message modifié !'}))
+    .catch( error => res.status(400).json({ error }))
+};
+
+/* liker un message  */
+exports.likeMessage = (req, res, next) =>{
+    let userId = req.body.userId
+    let messageId = req.params.id
+    let like = req.body.like
+
+    switch (like){
+        case 1 :
+        Message.updateOne({ _id: messageId }, { $push: { usersLiked: userId}, $inc: { likes: +1}})
+        .then(() => res.status(200).jspn({ ùessage: `Votre "like" à bien été ajouté!`}))
+        .catch((error) => res.status(400).json ({ error }));
+        case 0 :
+        Message.findOne({ _id: messageId },)
+        .then((message) => {
+            if (message.usersLiked.includes(userId)){
+                Message.updateOne({ _id: messageId}, {$pull: { usersLiked: userId}, $inc: {likes: -1}})
+                .then(() => { res.status(200).json({ message: `Votre "like" à déjà été prit en compte!`})})
+                .catch((error) => res.status(400).json ({ error }))
+            }
+        })
+        .catch((error) => res.status(404).json({ error }))
+            break;
+    }
+};

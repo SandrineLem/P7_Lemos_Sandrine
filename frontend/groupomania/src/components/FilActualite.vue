@@ -36,10 +36,5 @@ export default {
     align-content: center;
     
 }
-@media screen and (min-width:800px) and (max-width:780px){
-.FilActualite{
-    width: 400px;
-}
 
-}
 </style>

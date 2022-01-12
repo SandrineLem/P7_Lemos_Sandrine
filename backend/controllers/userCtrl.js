@@ -178,7 +178,7 @@ exports.changeProfil = (req, res, next) => {
                     }
                 });
             })
-            .catch((error) => json(error));
+            .catch((error) => res.status(500).json(error));
     } else {
         res.status(406).json({ error: "mot de passe incorrect !" });
     }
@@ -197,7 +197,7 @@ exports.deleteProfil = (req, res) => {
             if (user != null) {
                 //Delete de tous les posts de l'user même s'il y en a pas
                 models.Message.destroy({
-                        where: { idUSERS: id },
+                        where: { userId: id },
                     })
                     .then(() => {
                         console.log("Tous les messages de cette utilisateurs ont été supprimé");
