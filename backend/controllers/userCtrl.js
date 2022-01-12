@@ -74,12 +74,7 @@ exports.signup = (req, res, next) => {
                 res.status(500).json({ error });
             });
     }
-
 };
-
-    
-
-
 
 /*--connexion utilisateur
     -connexion utilisateur
@@ -92,54 +87,63 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
     const email = req.body.email;
-    console.log(email)
+    console.log(email);
     const password = req.body.password;
     if (email === null || password === null) {
         res.status(400).json({ error: "Parametre manquant !" });
     }
     models.User.findOne({
-            where: { email: email }
+            where: { email: email },
         })
-        .then(user => {
+        .then((user) => {
             if (user) {
-                console.log(user)
-                console.log(user.password)
-                console.log(password)
-                bcrypt.compare(password, user.password, (errrorCompPawd, resComparePassword) => {
-                    if (resComparePassword) {
-                        res.status(200).json({
-                            userId: user.id,
-                            token: utils.generateToken(user),
-                            isAdmin: user.isAdmin,
-                        })
-                    } else {
-                        res.status(403).json({ error: "Mot de passe incorrect !" });
-                    };
-                })
+                console.log(user);
+                console.log(user.password);
+                console.log(password);
+                bcrypt.compare(
+                    password,
+                    user.password,
+                    (errrorCompPawd, resComparePassword) => {
+                        if (resComparePassword) {
+                            res.status(200).json({
+                                userId: user.id,
+                                //--appele la fonction sign
+                                token: jwt.sign(
+                                    //données que l'on souhaite encoder
+                                    { userId: user.id },
+                                    //ajout du secret token via dotenv
+                                    "MON_SUPER_TOKEN_SECRET",
+                                    //expiration
+                                    { expiresIn: "24h" }
+                                ),
+                            });
+                        } else {
+                            res.status(403).json({ error: "Mot de passe incorrect !" });
+                        }
+                    }
+                );
             } else {
                 res.status(404).json({ error: " Utilisateur inconnu !" });
             }
         })
-        .catch((error) => {res.status(500).json({ error });
-        })             
+        .catch((error) => {
+            res.status(500).json({ error });
+        });
 };
-
 
 /*--Afficher le profil du compte de l'utilisateur
  */
 
 exports.userProfil = (req, res, next) => {
-    const id = req.params.id;
-    console.log(id)
+    const id = req.body.userId;
+    console.log(id);
     models.User.findOne({
-            attributes: ["id", 'email', "username", "isAdmin"],
-            where: { id: id }
+            attributes: ["id", "email", "username", "isAdmin"],
+            where: { id: id },
         })
-        .then(user => res.status(200).json(user))
-        .catch(error => res.status(500).json(error))
+        .then((user) => res.status(200).json(user))
+        .catch((error) => res.status(500).json(error));
 };
-
-
 
 /*---modifier le compte  de l'utilisateur---
     -Récup l'id de l'user et le nouveau mdp
@@ -148,35 +152,36 @@ exports.userProfil = (req, res, next) => {
     -mettre a jour 
 */
 exports.changeProfil = (req, res, next) => {
-    const id = req.params.id;
+    const id = req.body.userId;
     const newPassword = req.body.newPassword;
     console.log(newPassword);
 
-    
     if (verifInput.validPassword(newPassword)) {
         models.User.findOne({
                 where: { id: id },
             })
-            .then(user => {
+            .then((user) => {
                 console.log("user trouvé", user);
-                bcrypt.compare(newPassword, user.password, (errrorCompPawd, resComparePassword) => {
-                    //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
-                    if (resComparePassword) {
-                        res.status(406).json({ error: "Saisie du même mot de passe !" });
-                    } else {
-                        bcrypt.hash(newPassword, 10, function(error, bcryptNewPassword) {
-                            models.User.update(
-                                { password: bcryptNewPassword },
-                                { where: { id: id } })
-                                .then(() =>
-                                    res.status(201).json({
-                                        confirmation: "modification mot de passe effectuée !",
-                                    })
-                                )
-                                .catch((error) => res.status(500).json(error));
-                        });
+                bcrypt.compare(
+                    newPassword,
+                    user.password,
+                    (errrorCompPawd, resComparePassword) => {
+                        //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
+                        if (resComparePassword) {
+                            res.status(406).json({ error: "Saisie du même mot de passe !" });
+                        } else {
+                            bcrypt.hash(newPassword, 10, function(error, bcryptNewPassword) {
+                                models.User.update({ password: bcryptNewPassword }, { where: { id: id } })
+                                    .then(() =>
+                                        res.status(201).json({
+                                            confirmation: "modification mot de passe effectuée !",
+                                        })
+                                    )
+                                    .catch((error) => res.status(500).json(error));
+                            });
+                        }
                     }
-                });
+                );
             })
             .catch((error) => res.status(500).json(error));
     } else {
@@ -188,22 +193,24 @@ exports.changeProfil = (req, res, next) => {
 
 exports.deleteProfil = (req, res) => {
     //récup de l'id de l'user
-    const id = req.params.id;
+    const id = req.body.userId;
     if (id != null) {
         //Recherche sécurité si user existe bien
         models.User.findOne({
             where: { id: id },
-        }).then(user => {
+        }).then((user) => {
             if (user != null) {
                 //Delete de tous les posts de l'user même s'il y en a pas
                 models.Message.destroy({
                         where: { userId: id },
                     })
                     .then(() => {
-                        console.log("Tous les messages de cette utilisateurs ont été supprimé");
+                        console.log(
+                            "Tous les messages de cette utilisateurs ont été supprimé"
+                        );
                         //Suppression de l'utilisateur
                         models.User.destroy({
-                                where: { id: id},
+                                where: { id: id },
                             })
                             .then(() => res.end())
                             .catch((err) => console.log(err));
