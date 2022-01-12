@@ -5,8 +5,9 @@ console.log(error);*/
 
 const bcrypt = require("bcrypt");
 const models = require("../models");
-const utils = require("../utils/jwtutils");
+const jwt = require('jsonwebtoken');
 const verifInput = require("../utils/InputVerifUtils");
+
 
 /*--creation d'un utilisateur
         -verification du contenu inscrit par l'utilisateur

@@ -12,8 +12,6 @@ function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only")
 var error = new Error("The error message");
 error.http_code = 404;
 console.log(error);*/
-var utils = require("../utils/jwtUtils");
-
 var models = require("../models");
 
 var fs = require('fs');

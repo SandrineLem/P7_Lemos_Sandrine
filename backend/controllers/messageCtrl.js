@@ -2,7 +2,7 @@
 var error = new Error("The error message");
 error.http_code = 404;
 console.log(error);*/
-const utils = require("../utils/jwtUtils");
+
 const models = require("../models");
 const fs = require('fs');
 const Message = require('../models/message');

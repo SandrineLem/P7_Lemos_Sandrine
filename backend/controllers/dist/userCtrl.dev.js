@@ -8,7 +8,7 @@ var bcrypt = require("bcrypt");
 
 var models = require("../models");
 
-var utils = require("../utils/jwtutils");
+var jwt = require('jsonwebtoken');
 
 var verifInput = require("../utils/InputVerifUtils");
 /*--creation d'un utilisateur
