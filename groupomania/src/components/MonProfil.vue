@@ -1,8 +1,8 @@
 <template>
     <div class="monprofil">
         <img src="/src/assets/profile_img.png">
-        <p>Votre nom:<br></p>
-        <p>Votre email:<br></p>
+        <p>Votre nom: {{user.username}}<br></p>
+        <p>Votre email:{{user.email}}<br></p>
         <div >
             <button class="button">Acceder au reseau Social Groupomania</button>
             <button class="button">Modifier mon mot de passe</button>
@@ -27,6 +27,28 @@ export default {
             this.$router.push('/updateProfil')
         }
     },
+    el:'monprofil',
+    data(){
+        return {
+                user:{
+                    username: null,
+                    email: null,
+                },
+                loading: true,
+                errored: false
+            }
+    },
+    
+    mounted () {
+    axios
+      .get('http://localhost:3000/api/user/myprofil')
+      .then(response => (this.user = response.data.user))
+      .catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+      .finally(() => this.loading = false)
+  }
 }
 </script>
 
