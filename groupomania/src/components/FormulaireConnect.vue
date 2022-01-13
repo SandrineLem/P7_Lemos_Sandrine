@@ -2,9 +2,6 @@
     <div class="card_form" >
         <form @submit="postData" methods="post">
             <div class="form-row">
-                <input type="text" name="username" placeholder="Nom" class="form_row_input" v-model="user.username"/>
-            </div>
-            <div class="form-row">
                 <input type="email" name="email" placeholder="email" class="form_row_input" v-model="user.email"/>
             </div>
             <div class="form-row">
@@ -28,7 +25,6 @@ import VueAxios from 'vue-axios'
         data(){
             return {
                 user:{
-                    username: null,
                     email: null,
                     password: null
                 }
