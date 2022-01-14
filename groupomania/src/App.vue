@@ -2,9 +2,9 @@
 
   <div id="nav">
     <img src="./assets/icon-left-font-monochrome-black.png">
-    <router-link to="/">Accueil</router-link> |
+    <router-link to="/">Se connecter</router-link> |
     <router-link to="/inscription">Inscription</router-link> |
-    <router-link to="/">Se deconnecter</router-link>
+    <router-link to="/">Se deconnecter</router-link> |
     <router-link to="/myprofil">Mon profil</router-link>
   </div>
   <router-view/>

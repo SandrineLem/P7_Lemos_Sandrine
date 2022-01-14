@@ -1,15 +1,14 @@
 <template>
-    <div class="monprofil">
-        <img src="/src/assets/profile_img.png">
-        <p>Votre nom: {{user.username}}<br></p>
-        <p>Votre email:{{user.email}}<br></p>
-        <div >
-            <button class="button">Acceder au reseau Social Groupomania</button>
-            <button class="button">Modifier mon mot de passe</button>
-            <button class="button">Supprimer mon mon compte</button>
+        <div id="Monprofil">
+            <img src="/src/assets/profile_img.png">
+            <p>Votre nom: {{user.username}}<br></p>
+            <p>Votre email:{{user.email}}<br></p>
+            <div >
+                <button class="button">Acceder au reseau Social Groupomania</button>
+                <button @click="modifyPass()" class="button">Modifier mon mot de passe</button>
+                <button class="button">Supprimer mon mon compte</button>
+            </div>
         </div>
-        
-    </div>
 </template>
 
 <script>
@@ -27,7 +26,7 @@ export default {
             this.$router.push('/updateProfil')
         }
     },
-    el:'monprofil',
+    el:'Monprofil',
     data(){
         return {
                 user:{
@@ -53,7 +52,7 @@ export default {
 </script>
 
 <style scoped>
-.monprofil{
+#Monprofil{
     display: flex;
     flex-direction: column;
     align-items: center;

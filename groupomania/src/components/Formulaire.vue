@@ -1,6 +1,6 @@
 <template>
     <div class="card_form">
-        <form @submit="postData" methods="post">
+        <form @submit="postData" method="POST">
             <div class="form-row">
                 <input type="text" placeholder="Nom" class="form_row_input" name="username" v-model="user.username"/>
             </div>
@@ -14,7 +14,7 @@
                 <input type="password" placeholder="Mot de passe" class="form_row_input" name="password" v-model="user.password"/>
             </div>
             <div class="form-row">
-                <button @click="myProfil()" type="submit" class="button">Créer mon compte</button>
+                <button type="submit" class="button">Créer mon compte</button>
             </div>    
         </form>
     </div>
@@ -22,16 +22,11 @@
 
 <script>
 // import Vue from 'vue'   // in Vue 2
-import * as Vue from 'vue' // in Vue 3
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import * as Vue from "vue"; // in Vue 3
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import Accueil from "../views/Accueil";
     export default {
-        methods:{
-            myProfil: function(){
-            this.$store.commit('Myprofil')
-            this.$router.push('/myprofil')
-        }
-        },
         data(){
             return {
                 user:{
@@ -39,18 +34,22 @@ import VueAxios from 'vue-axios'
                     firstname: null,
                     email: null,
                     password: null
-                }
-            }
+                },
+            };
         },
         methods:{
-            postData(e)
-            {
-                this.axios.post("http://localhost:3000/api/user/signup")
-                .then((result)=>{
-                    console.log(result)
+            postData(e) {
+                e.preventDefault();
+                console.warn(this.user);
+                axios.post("http://localhost:3000/api/user/signup", this.user)
+                .then((result) => {
+                    console.warn(result);
+                    localStorage.setItem("token", result.data.token);
+                    alert("Votre compte à été créé avec succès, vous allez être redirigé(e) sur la page de connexion !")
+                    this.$router.push('/')
                 })
                 console.log(this.user)
-                e.preventDefault();
+                
             }
         },
         
