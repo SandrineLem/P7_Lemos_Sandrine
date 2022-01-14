@@ -30,24 +30,20 @@ export default {
     data(){
         return {
                 user:{
-                    username: null,
-                    email: null,
+                     userId: 6
                 },
-                loading: true,
-                errored: false
+                
             }
     },
-    
     mounted () {
-    axios
-      .get('http://localhost:3000/api/user/myprofil')
-      .then(response => (this.user = response.data.user))
-      .catch(error => {
-        console.log(error)
-        this.errored = true
-      })
-      .finally(() => this.loading = false)
-  }
+
+        axios.get('http://localhost:3000/api/user/myprofil', this.user, {
+    headers: {
+        Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
+    }
+    })
+    .then(response => console.warm(response))
+    },
 }
 </script>
 

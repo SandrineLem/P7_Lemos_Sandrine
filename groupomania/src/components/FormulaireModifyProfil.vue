@@ -1,6 +1,6 @@
 <template>
 <div class="modifyPass">
-    <form @submit="postData" methods="post">
+    <form @submit="getData" method="PUT">
             <div class="form-row">
                 <input type="text" placeholder="Nom" class="form_row_input" name="username" v-model="user.username"/>
             </div>
@@ -26,16 +26,17 @@
 
 <script>
 // import Vue from 'vue'   // in Vue 2
-import * as Vue from 'vue' // in Vue 3
-import axios from 'axios'
-import VueAxios from 'vue-axios'
+import * as Vue from 'vue'; // in Vue 3
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import MyProfil from "../views/Myprofil"; 
+
     export default {
-    methods:{
+    /*methods:{
         myProfil: function(){
-            this.$store.commit('Myprofil')
             this.$router.push('/myprofil')
         }
-    },
+    },*/
     data(){
         return {
             user:{
@@ -44,18 +45,20 @@ import VueAxios from 'vue-axios'
                 email: null,
                 password: null,
                 newPassword: null
-            }
-        }
+            },
+        };
     },
     methods:{
-        postData(e)
-        {
-            this.axios.post("http://localhost:3000/api/user/updateProfil",this.user)
-            .then((result)=>{
-                console.log(result)
-            })
-            console.log(this.user)
+        putData(e){
             e.preventDefault();
+            console.log(this.user);
+            axios.put("http://localhost:3000/api/user/updateProfil", this.user)
+            .then((result)=> {
+                console.warn(result);
+                localStorage.setItem("token", result.data.token);
+                alert("Votre mot de passe à été modifié avec succès !");
+                console.log(this.user)
+            })    
         }
     }
 }

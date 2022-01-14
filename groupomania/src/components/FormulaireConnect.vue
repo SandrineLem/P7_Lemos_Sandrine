@@ -40,6 +40,7 @@ export default {
           localStorage.setItem("token", result.data.token);
           this.$router.push('/myprofil')
         });
+        alert(" Email ou mot de passe incorrect ! ");
     },
   },
 };

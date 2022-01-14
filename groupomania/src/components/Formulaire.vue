@@ -47,8 +47,9 @@ import Accueil from "../views/Accueil";
                     localStorage.setItem("token", result.data.token);
                     alert("Votre compte à été créé avec succès, vous allez être redirigé(e) sur la page de connexion !")
                     this.$router.push('/')
+                    console.log(this.user)
                 })
-                console.log(this.user)
+                alert("Vous avez déjà un compte !");
                 
             }
         },
