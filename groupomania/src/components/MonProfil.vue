@@ -1,12 +1,13 @@
 <template>
         <div id="Monprofil">
             <img src="/src/assets/profile_img.png">
+            <p>Votre Prenom {{user.firsname}}<br></p>
             <p>Votre nom: {{user.username}}<br></p>
             <p>Votre email:{{user.email}}<br></p>
             <div >
                 <button class="button">Acceder au reseau Social Groupomania</button>
-                <button @click="modifyPass()" class="button">Modifier mon mot de passe</button>
-                <button class="button">Supprimer mon mon compte</button>
+                <button  class="button" @click="modifyPass()">Modifier mon mot de passe</button>
+                <button  class="button" @click="deletUser()">Supprimer mon mon compte</button>
             </div>
         </div>
 </template>
@@ -19,32 +20,47 @@ import VueAxios from 'vue-axios'
 
 
 export default {
-    
-    methods:{
-        modifyPass: function(){
-            this.$store.commit('UpdateProfil')
-            this.$router.push('/updateProfil')
-        }
-    },
     el:'Monprofil',
     data(){
         return {
                 user:{
-                     userId: 6
-                },
-                
+                     username: null,
+                     firsname:null,
+                     email: null,
+                     password: null
+                },    
             }
     },
     mounted () {
-
-        axios.get('http://localhost:3000/api/user/myprofil', this.user, {
+    axios.get('http://localhost:3000/api/user/myprofil', this.user, {
     headers: {
         Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
     }
     })
     .then(response => console.warm(response))
     },
+
+     methods:{
+        deletUser(){
+            alert(" Votre compte à bien été supprimé ! ");
+            axios.delete("http://localhost:3000/api/user/deleteProfil", {
+          headers: {
+            Authorization: "Bearer " + localStorage.getItem("token")
+          }
+        })
+        .then(() => {
+          localStorage.clear(); 
+        })
+        .catch(error => console.log(error));
+        },
+
+        modifyPass: function(){
+            this.$store.commit('UpdateProfil')
+            this.$router.push('/updateProfil')
+        }
+    },
 }
+
 </script>
 
 <style scoped>

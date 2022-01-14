@@ -18,7 +18,7 @@
             </div>
             <div class="form-row">
                 <button class="button" type="submit" >Modifier votre mot de passe</button>
-                <button @click="myProfil()" class="button" >Annuler revenir à mon profil</button>
+                <button  class="button" @click="myProfil()">Annuler revenir à mon profil</button>
             </div>    
         </form>
 </div>
@@ -32,11 +32,12 @@ import VueAxios from 'vue-axios';
 import MyProfil from "../views/Myprofil"; 
 
     export default {
-    /*methods:{
+    methods:{
         myProfil: function(){
+            this.$store.commit('Myprofil')
             this.$router.push('/myprofil')
         }
-    },*/
+    },
     data(){
         return {
             user:{
