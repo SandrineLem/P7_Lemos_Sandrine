@@ -18,12 +18,7 @@ module.exports = function (req, res, next) {
       userId: userId
     }; //s'il y a un userid on veut verifier qu'elle correspond bien au token
 
-    if (req.body.userId && parseInt(req.body.userId) !== parseInt(userId)) {
-      //renvoyer l'erreur avec throw
-      throw "User ID non valable !";
-    } else {
-      next();
-    }
+    next();
   } catch (error) {
     //renvoyer le catch(401) pb d'authentification
     res.status(401).json({

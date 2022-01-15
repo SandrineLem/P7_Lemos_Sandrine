@@ -1,9 +1,9 @@
 <template>
         <div id="Monprofil">
-            <img src="/src/assets/profile_img.png">
-            <p>Votre Prenom {{user.firsname}}<br></p>
+            <img src="profile_img.png">
+            <p>Votre Prenom: {{user.firstname}}<br></p>
             <p>Votre nom: {{user.username}}<br></p>
-            <p>Votre email:{{user.email}}<br></p>
+            <p>Votre email: {{user.email}}<br></p>
             <div >
                 <button class="button">Acceder au reseau Social Groupomania</button>
                 <button  class="button" @click="modifyPass()">Modifier mon mot de passe</button>
@@ -25,19 +25,19 @@ export default {
         return {
                 user:{
                      username: null,
-                     firsname:null,
+                     firstname:null,
                      email: null,
-                     password: null
+                     
                 },    
             }
     },
     mounted () {
-    axios.get('http://localhost:3000/api/user/myprofil', this.user, {
+    axios.get('http://localhost:3000/api/user/myprofil', {
     headers: {
         Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
     }
     })
-    .then(response => console.warm(response))
+    .then(response => this.user = response.data)
     },
 
      methods:{
@@ -49,7 +49,9 @@ export default {
           }
         })
         .then(() => {
-          localStorage.clear(); 
+          localStorage.clear();
+          this.$router.push('/inscription')
+          
         })
         .catch(error => console.log(error));
         },

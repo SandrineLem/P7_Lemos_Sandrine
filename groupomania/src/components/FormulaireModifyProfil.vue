@@ -1,18 +1,7 @@
 <template>
-<div class="modifyPass">
-    <form @submit="getData" method="PUT">
-            <div class="form-row">
-                <input type="text" placeholder="Nom" class="form_row_input" name="username" v-model="user.username"/>
-            </div>
-            <div class="form-row">
-                <input type="text" placeholder="Prenom" class="form_row_input" name="firstname" v-model="user.firstname"/>
-            </div>
-            <div class="form-row">
-                <input type="email" placeholder="email" class="form_row_input" name="email" v-model="user.email"/>
-            </div>
-            <div class="form-row">
-                <input type="password" placeholder="Mot de passe actuel" class="form_row_input" name="password" v-model="user.password"/>
-            </div>
+<div id="modifyPass">
+    <form @submit="putData" method="PUT">
+            
             <div class="form-row">
                 <input type="password" placeholder="Nouveau Mot de passe" class="form_row_input" name="newPassword" v-model="user.newPassword"/>
             </div>
@@ -32,6 +21,7 @@ import VueAxios from 'vue-axios';
 import MyProfil from "../views/Myprofil"; 
 
     export default {
+    name: 'modifyPass',
     methods:{
         myProfil: function(){
             this.$store.commit('Myprofil')
@@ -41,10 +31,6 @@ import MyProfil from "../views/Myprofil";
     data(){
         return {
             user:{
-                username: null,
-                firstname: null,
-                email: null,
-                password: null,
                 newPassword: null
             },
         };
@@ -53,12 +39,17 @@ import MyProfil from "../views/Myprofil";
         putData(e){
             e.preventDefault();
             console.log(this.user);
-            axios.put("http://localhost:3000/api/user/updateProfil", this.user)
+            axios.put('http://localhost:3000/api/user/updateProfil', this.user, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
+                }
+            })
             .then((result)=> {
                 console.warn(result);
-                localStorage.setItem("token", result.data.token);
+                localStorage.removeItem("token");
                 alert("Votre mot de passe à été modifié avec succès !");
-                console.log(this.user)
+                this.$router.push('/')
+                
             })    
         }
     }
@@ -67,7 +58,7 @@ import MyProfil from "../views/Myprofil";
 </script>
 
 <style scoped>
-.modifyPass{
+#modifyPass{
     align-items: center;
     display: flex;
     flex-direction: column;

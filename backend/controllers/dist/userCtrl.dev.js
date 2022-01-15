@@ -145,10 +145,10 @@ exports.login = function (req, res, next) {
 
 
 exports.userProfil = function (req, res, next) {
-  var id = req.body.userId;
+  var id = req.auth.userId;
   console.log(id);
   models.User.findOne({
-    attributes: ["id", "email", "username", "isAdmin"],
+    attributes: ["id", "email", "username", "firstname", "isAdmin"],
     where: {
       id: id
     }
@@ -167,7 +167,7 @@ exports.userProfil = function (req, res, next) {
 
 
 exports.changeProfil = function (req, res, next) {
-  var id = req.body.userId;
+  var id = req.auth.userId;
   var newPassword = req.body.newPassword;
   console.log(newPassword);
 
@@ -178,7 +178,7 @@ exports.changeProfil = function (req, res, next) {
       }
     }).then(function (user) {
       console.log("user trouvé", user);
-      bcrypt.compare(newPassword, user.password, function (errrorCompPawd, resComparePassword) {
+      bcrypt.compare(newPassword, user.password, function (errorCompPawd, resComparePassword) {
         //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
         if (resComparePassword) {
           res.status(406).json({
@@ -215,7 +215,7 @@ exports.changeProfil = function (req, res, next) {
 
 exports.deleteProfil = function (req, res) {
   //récup de l'id de l'user
-  var id = req.body.userId;
+  var id = req.auth.userId;
 
   if (id != null) {
     //Recherche sécurité si user existe bien

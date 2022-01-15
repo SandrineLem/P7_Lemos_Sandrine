@@ -47,7 +47,7 @@ exports.allMessage = function (req, res, next) {
 
 exports.getOneMessage = function (req, res, next) {
   models.Message.findOne({
-    userId: req.params.userId
+    id: req.params.id
   }).then(function (message) {
     return res.status(200).json(message);
   })["catch"](function (error) {
@@ -69,7 +69,7 @@ exports.getOneMessage = function (req, res, next) {
 
 
 exports.createMessage = function (req, res, next) {
-  var userId = req.body.userId;
+  var userId = req.auth.userId;
   var titlte = req.body.titlte;
   var attachmentURL = '';
   models.User.findOne({

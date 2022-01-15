@@ -38,9 +38,12 @@ export default {
         .then((result) => {
           console.warn(result);
           localStorage.setItem("token", result.data.token);
-          this.$router.push('/myprofil')
-        });
-        alert(" Email ou mot de passe incorrect ! ");
+          this.$router.go('/myprofil')
+          alert(" Bienvenue vous allez être redirigé sur votre profil");
+        })
+        .catch((error) => {
+          alert(" Email ou mot de passe incorrect ! ");
+        })
     },
   },
 };

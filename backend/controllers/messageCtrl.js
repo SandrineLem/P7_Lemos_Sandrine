@@ -34,7 +34,7 @@ exports.allMessage = (req, res, next) =>{
 
 exports.getOneMessage = (req, res, next) =>{
     
-    models.Message.findOne({ userId: req.params.userId})
+    models.Message.findOne({ id: req.params.id})
     .then(message => res.status(200).json(message))
     .catch(error => res.status(404).json ({ error }));
 };
@@ -52,7 +52,7 @@ exports.getOneMessage = (req, res, next) =>{
     -creer le message 
 */
 exports.createMessage = (req, res, next) => {
-    const userId = req.body.userId;
+    const userId = req.auth.userId;
     const titlte = req.body.titlte;
     const attachmentURL = '';
 

@@ -136,10 +136,10 @@ exports.login = (req, res, next) => {
  */
 
 exports.userProfil = (req, res, next) => {
-    const id = req.body.userId;
+    const id = req.auth.userId;
     console.log(id);
     models.User.findOne({
-            attributes: ["id", "email", "username", "isAdmin"],
+            attributes: ["id", "email", "username", "firstname", "isAdmin"],
             where: { id: id },
         })
         .then((user) => res.status(200).json(user))
@@ -153,7 +153,7 @@ exports.userProfil = (req, res, next) => {
     -mettre a jour 
 */
 exports.changeProfil = (req, res, next) => {
-    const id = req.body.userId;
+    const id = req.auth.userId;
     const newPassword = req.body.newPassword;
     console.log(newPassword);
 
@@ -166,7 +166,7 @@ exports.changeProfil = (req, res, next) => {
                 bcrypt.compare(
                     newPassword,
                     user.password,
-                    (errrorCompPawd, resComparePassword) => {
+                    (errorCompPawd, resComparePassword) => {
                         //bcrypt renvoit resComparePassword si les mdp sont identiques donc aucun changement
                         if (resComparePassword) {
                             res.status(406).json({ error: "Saisie du même mot de passe !" });
@@ -194,7 +194,7 @@ exports.changeProfil = (req, res, next) => {
 
 exports.deleteProfil = (req, res) => {
     //récup de l'id de l'user
-    const id = req.body.userId;
+    const id = req.auth.userId;
     if (id != null) {
         //Recherche sécurité si user existe bien
         models.User.findOne({
