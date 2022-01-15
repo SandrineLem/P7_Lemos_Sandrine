@@ -6,7 +6,7 @@ console.log(error);*/
 const models = require("../models");
 const fs = require('fs');
 const Message = require('../models/message');
-
+const multer = require('multer')
 
 /* --recuperer tous les messages
    -chercher tous les model de message des utilisateur avec firstname 
@@ -52,19 +52,19 @@ exports.getOneMessage = (req, res, next) =>{
     -creer le message 
 */
 exports.createMessage = (req, res, next) => {
-    const userId = req.auth.userId;
+    const id = req.auth.userId;
     const titlte = req.body.titlte;
     const attachmentURL = '';
-
+    const userId = req.auth.userId;
 
     models.User.findOne({
-        attributes : ['id', 'email', 'username'],
-        where: { userId: userId }
+        attributes : ['id', 'email'],
+        where: {id: id }
     })
     .then(user =>{
         if(user !== null){
             const content = req.body.content;
-        if(req.body.file != undefined){
+        if(req.file != undefined){
             attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
         }
         else{
@@ -74,17 +74,20 @@ exports.createMessage = (req, res, next) => {
             res.status(400).json({ error: 'Aucun contenu à publier !'})
         }else{
             models.Message.createMessage({
-                titlte : titlte,
+                title : titlte,
                 content: content,
                 attachmentURL: attachmentURL,
                 likes: 0,
-                UserId: userId
+                userId: userId,
+                
+                
+                
             })
             .then((newMessage) =>{
                 res.status(201).json(newMessage)
             })
             .catch((error) =>{
-                res.status(500).json(error)
+                res.status(400).json(error)
             })
         };
         }else{
@@ -128,7 +131,7 @@ exports.modifyMessage = (req, res, next) => {
 
 /* liker un message  */
 exports.likeMessage = (req, res, next) =>{
-    let userId = req.body.userId
+    const userId = req.auth.userId;
     let messageId = req.params.id
     let like = req.body.like
 

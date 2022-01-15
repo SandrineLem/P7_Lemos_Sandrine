@@ -17,6 +17,8 @@ var models = require("../models");
 var fs = require('fs');
 
 var Message = require('../models/message');
+
+var multer = require('multer');
 /* --recuperer tous les messages
    -chercher tous les model de message des utilisateur avec firstname 
    - retourner tous les messages 
@@ -69,19 +71,20 @@ exports.getOneMessage = function (req, res, next) {
 
 
 exports.createMessage = function (req, res, next) {
-  var userId = req.auth.userId;
+  var id = req.auth.userId;
   var titlte = req.body.titlte;
   var attachmentURL = '';
+  var userId = req.auth.userId;
   models.User.findOne({
-    attributes: ['id', 'email', 'username'],
+    attributes: ['id', 'email'],
     where: {
-      userId: userId
+      id: id
     }
   }).then(function (user) {
     if (user !== null) {
       var content = req.body.content;
 
-      if (req.body.file != undefined) {
+      if (req.file != undefined) {
         attachmentURL = (_readOnlyError("attachmentURL"), "".concat(req.protocol, "://").concat(req.get('host'), "/images/").concat(req.file.filename));
       } else {
         attachmentURL == null;
@@ -95,15 +98,15 @@ exports.createMessage = function (req, res, next) {
         });
       } else {
         models.Message.createMessage({
-          titlte: titlte,
+          title: titlte,
           content: content,
           attachmentURL: attachmentURL,
           likes: 0,
-          UserId: userId
+          userId: userId
         }).then(function (newMessage) {
           res.status(201).json(newMessage);
         })["catch"](function (error) {
-          res.status(500).json(error);
+          res.status(400).json(error);
         });
       }
 
@@ -168,7 +171,7 @@ exports.modifyMessage = function (req, res, next) {
 
 
 exports.likeMessage = function (req, res, next) {
-  var userId = req.body.userId;
+  var userId = req.auth.userId;
   var messageId = req.params.id;
   var like = req.body.like;
 
