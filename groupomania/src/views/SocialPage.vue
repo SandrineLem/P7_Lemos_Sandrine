@@ -1,36 +1,36 @@
 <template>
 <div id="ReseauSocial">
-        <h2>Bienvenue sur le Reseau Social de<br>Groupomania</h2>
-        <div class="Card_message">
-            <h2 class="card_title">"Titre du Message"</h2>
-            <h3>"Nom de l'utilisateur du message" </h3>
-            <div class="img_message">
-                <img src="../assets/icon-groupomania-ac.png">
-            </div>
+        <h1>Bienvenue sur le Reseau Social de<br>Groupomania</h1>
+        
             <div class="content_message">
+                <p class="card_title">"Message de : " Justine " </p>
+                <p>"Titre du Message"</p>
                 <p>"Contenu du message "</p>
-            </div>
-        <div class="card_button_message">
-            <button class="button_message">modifier</button>
-            <button class="button_message">supprimer</button>
-            <button class="button_message">liker</button>
-        </div>
-    </div>
-    <div class="card_create_msg">
-            <h2 class="card_title" >Evonyer un message</h2>
+                <div class="img_message">
+                <img src="../assets/icon-groupomania-ac.png">
+                </div>
+                <div class="form-row_conect">
+                    <button class="button_message">modifier</button>
+                    <button class="button_message">supprimer</button>
+                    <button class="button_message">liker</button>
+                </div>
+            </div>   
             
-            <form method="post" class="form-row">
-                <input  type="text" class="form_row_input" placeholder="Titre du message"/>
-                <label for="message">Ecrivez votre message :</label>
+          
+        
+            <div class="Card_message">
+                <h3 class="card_title" >Envoyer un message</h3>
+                <form method="post" class="form-row">
+                    <input  type="text" class="form_row_input" placeholder="Titre du message"/>
+                    <label for="message">Ecrivez votre message :</label>
 
-                <textarea class="form_row_input_message" name="message"
-                    rows="5" cols="33">
-                    
-                </textarea>
-                <input  type="file" class="form_row_input"/>
-                <button type="submit" class="button_message">Envoyer</button>
-            </form>  
-        </div>
+                    <textarea class="form_row_input_message" name="message"
+                        rows="4" cols="25">    
+                    </textarea>
+                    <input  type="file" class="form_row_input_lien"/>
+                    <button type="submit" class="button_message">Envoyer</button>
+                </form>  
+            </div>
 
 </div>
 </template>
@@ -49,6 +49,37 @@ export default {
 
 
 <style scoped>
+
+.card_title{
+    color: #f05454;
+    margin-left: 20px;
+}
+
+h1{
+  padding-top:10px;
+  color:#f05454;
+}
+
+h2{
+  color:#f05454;
+}
+p{
+  color: white;
+}
+#ReseauSocial{
+    padding-bottom: 25px;
+  margin-top: 15px;
+  background-color:#30475e;
+  border-radius:7px;
+  -webkit-box-shadow: 9px 2px 21px 1px rgba(0,0,0,0.44); 
+  box-shadow: 9px 8px 21px 1px rgba(0,0,0,0.44);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-row{
+    width: 100%;
+}
 .form_row_input{
     padding: 8px;
     border: none;
@@ -61,6 +92,8 @@ export default {
     color: black;
     margin-bottom:5px;
 }
+
+
 .form_row_input_message{
     padding: 8px;
     border: none;
@@ -69,9 +102,20 @@ export default {
     font-weight: 5000000;
     font-size: 16px;
     flex:1;
-    min-width: 100px;
+    max-width: 100%;
     color: black;
     
+}
+.form_row_input_lien{
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    background: #e8e8e8;
+    font-weight: 5000000;
+    font-size: 10px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: black;
 }
 .card_create_msg{
     margin-top:20px;
@@ -83,7 +127,7 @@ export default {
 }
 .button_message{
     margin-right: 20px;
-    background: #30475e;
+    background: #f05454;
     color: white;
     border-radius: 8px;
     font-weight: 15px;
@@ -92,6 +136,17 @@ export default {
     margin-bottom: 10px;
     padding: 16px;
     transition: .4s background-color;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    font-size: 12px;
+}
+.button_message:hover{
+    color: white;
+    cursor: pointer;
+    background: #1976d2;
+    transition: all 100ms ease-in;
+    transform: scale(0.9, 1.1);
 }
 .card_button_message{
     display:flex;
@@ -101,22 +156,28 @@ export default {
 .content_message{
     width:80%;
     border-radius:25px;
-    border:solid  #f05454;
-    border-color: #30475e;
+    
+    border-color: #f05454;
     margin-bottom:20px;
+    -webkit-box-shadow: 5px 5px 15px 5px #000000; 
+    box-shadow: 5px 5px 15px 5px #000000;
 }
 .img_message{
     width:100%;
+    margin-bottom: 10px;
 }
 
 .Card_message{
+    margin-top:25px;
+    width:80%;
+    padding-top:20px;
     display:flex;
-    flex-direction: column;
+    flex-direction: collumn;
+    flex-wrap: wrap;
     align-items: center;
     border-radius:30px;
-    border:solid  #f05454;
-    border-color: #30475e;
-    width:100%;
+    -webkit-box-shadow: 5px 5px 15px 5px #000000; 
+    box-shadow: 5px 5px 15px 5px #000000;
 }
 
 
