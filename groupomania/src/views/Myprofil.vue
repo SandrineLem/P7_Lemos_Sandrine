@@ -25,6 +25,7 @@ import MonProfil from '../components/MonProfil.vue'
   box-shadow: 9px 8px 21px 1px rgba(0,0,0,0.44);
 }
 h1{
+  padding-top:10px;
   color:#f05454;
 }
 

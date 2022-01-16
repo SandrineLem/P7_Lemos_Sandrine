@@ -87,12 +87,13 @@ export default {
   font-weight: 15px;
   border: none;
   width:150px;
-  
-  padding:15px;
+  margin-bottom: 10px;
+  padding:10px;
   transition: .4s background-color;
   display: flex;
   flex-direction: columns;
   justify-content: center;
+  align-items: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-weight: bold;

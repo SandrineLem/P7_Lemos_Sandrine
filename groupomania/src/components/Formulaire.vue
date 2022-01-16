@@ -60,9 +60,9 @@ import Accueil from "../views/Accueil";
 <style scoped>
 
 .card_form{
-    align-items: center;
-    display: flex;
-    flex-direction: column;
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }
 .form-row{
     display: flex;
@@ -72,8 +72,7 @@ import Accueil from "../views/Accueil";
 }
 .form-row_conect{
   display: flex;
-  margin: 16px 0px 16px 30px;
-  gap: 16px;
+  margin: 16px 0px 16px 16px;
   flex-wrap: wrap;
 }
 .form_row_input{
@@ -83,12 +82,12 @@ import Accueil from "../views/Accueil";
   background: #f2f2f2;
   font-weight: 500;
   font-size: 16px;
-  flex: 1;
+  flex:1;
   min-width: 100px;
   color: black;
 }
 .button{
- background: #f05454;
+  background: #f05454;
   color: #30475e;
   border-radius: 8px;
   font-weight: 15px;
@@ -100,6 +99,7 @@ import Accueil from "../views/Accueil";
   display: flex;
   flex-direction: columns;
   justify-content: center;
+  align-items: center;
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   font-weight: bold;
