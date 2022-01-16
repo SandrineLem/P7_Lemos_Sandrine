@@ -54,6 +54,17 @@ var routes = [{
       return _interopRequireWildcard(require('../views/Updateprofil.vue'));
     });
   }
+}, {
+  path: '/reseauSocial',
+  name: 'ReseauSocial',
+  // route level code-splitting
+  // this generates a separate chunk (about.[hash].js) for this route
+  // which is lazy-loaded when the route is visited.
+  component: function component() {
+    return Promise.resolve().then(function () {
+      return _interopRequireWildcard(require('../views/SocialPage.vue'));
+    });
+  }
 }];
 var router = (0, _vueRouter.createRouter)({
   history: (0, _vueRouter.createWebHistory)(process.env.BASE_URL),

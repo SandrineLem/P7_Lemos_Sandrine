@@ -5,9 +5,10 @@
             <div class="form-row">
                 <input type="password" placeholder="Nouveau Mot de passe" class="form_row_input" name="newPassword" v-model="user.newPassword"/>
             </div>
+        <div class="card_button">    
             <div class="form-row">
                 <button class="button" type="submit" >Modifier votre mot de passe</button>
-                <button  class="button" @click="myProfil()">Annuler revenir à mon profil</button>
+        </div>        
             </div>    
         </form>
 </div>
@@ -63,6 +64,11 @@ import MyProfil from "../views/Myprofil";
     display: flex;
     flex-direction: column;
 }
+.card_button{
+    display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 .card_form{
     align-items: center;
     display: flex;
@@ -86,17 +92,29 @@ import MyProfil from "../views/Myprofil";
     color: black;
 }
 .button{
-  background: #30475e;
-  color: white;
+  background: #f05454;
+  color: #30475e;
   border-radius: 8px;
   font-weight: 15px;
   border: none;
-  width: 100%;
-  padding: 16px;
+  width:150px;
+  margin-bottom: 10px;
+  padding:10px;
   transition: .4s background-color;
+  display: flex;
+  flex-direction: columns;
+  justify-content: center;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: bold;
+  font-size: 12px;
+  height: 50px;
 }
 .button:hover{
+  color: white;
   cursor: pointer;
   background: #1976d2;
+  transition: all 100ms ease-in;
+    transform: scale(0.9, 1.1);
 }
 </style>

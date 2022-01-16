@@ -1,18 +1,17 @@
 <template>
-
+    <img src="./assets/icon-groupomania-ac.png" alt="Logo Entreprise">
   <div id="nav">
-    <img src="./assets/icon-left-font-monochrome-black.png" alt="Logo Entreprise">
       <div v-if="mode =='login'" >
-        <router-link to="/">Se connecter</router-link> |
+        <router-link to="/">Se connecter</router-link> 
       </div>
       <div v-if="mode =='login'">
-        <router-link to="/inscription">Inscription</router-link> |
+        <router-link to="/inscription">Inscription</router-link> 
       </div>  
       <div v-if="mode =='connect'">
-        <router-link to="/myprofil">Mon profil</router-link> |
+        <router-link to="/myprofil">Profil</router-link> 
       </div> 
       <div v-if="mode =='connect'">
-        <button class="button" @click="decoUser()">Se deconnecter</button> 
+        <button class="button_nav" @click="decoUser()">Se deconnecter</button> 
       </div>
         
         
@@ -54,24 +53,53 @@ export default {
 
 
 <style>
-.button{
+
+*{
+  margin-left:10px;
+  margin-right:10px;
+}
+.button :hover{
+  cursor: pointer;
+  background: #3498cb;
+  transform: translate(0px,2px);
+  -webkit-box-shadow: 9px -2px 16px -7px rgba(69,24,24,0.99); 
+  box-shadow: 9px -2px 16px -7px rgba(69,24,24,0.99);
+  transition: transform 0.8s 0s ease in out;
+}
+.button_nav{
+  margin-left:5px;
+  margin-top:9px;
   background: #30475e;
-  color: white;
+  color:#f05454;
   border-radius: 8px;
   font-weight: 15px;
   border: none;
-  width: 100%;
+  width:100%;
   margin-bottom: 10px;
   padding: 16px;
   transition: .4s background-color;
   display: flex;
   flex-direction: columns;
   justify-content: center;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: bold;
+  font-size: 16px;
+
+
 }
+.button_nav:hover{
+  cursor: pointer;
+  color: #3798cb; 
+  transition: transform 200ms ease-in;
+  transform: scale(0.9);
+}
+
 img{
-  max-width: 15%;
+  max-width: 40%;
   border-radius: 8px;
-  height: 180px
+  height: 200px;
+  width:200px;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -82,23 +110,33 @@ img{
 }
 
 #nav {
+  height: 73px;
+  border-radius:8px;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  align-content: center;
+  justify-content: flex-end;
   align-items: center;
-  margin: 0;
+  background-color:#30475e;
+  -webkit-box-shadow: 9px 2px 21px 1px rgba(0,0,0,0.44); 
+  box-shadow: 9px 8px 21px 1px rgba(0,0,0,0.44);
 }
 
 #nav a {
+  text-decoration: none;
   font-weight: bold;
-  color: #30475e;
+  color: #f05454;
+  margin-right:25px;
+  margin-left:25px;
 }
 #nav a:hover{
-  color: #f05454;
+    color:#3498cb;
+    transition: all 200ms ease-in;
+    transform: scale(1.2);
 }
 
 #nav a.router-link-exact-active {
-  color: #f05454;
+  color: #3798cb;
+   border-bottom: 1px solid;
 }
 
 
