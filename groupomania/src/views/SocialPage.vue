@@ -1,21 +1,8 @@
 <template>
 <div id="ReseauSocial">
         <h1>Bienvenue sur le Reseau Social de<br>Groupomania</h1>
-        
-            <div class="content_message">
-                <p class="card_title">"Message de : </p>
-                <p>{{message.titlte}}</p>
-                <p>{{message.content}}</p>
-                
-                <div class="form-row_conect">
-                    <button class="button_message">modifier</button>
-                    <button class="button_message">supprimer</button>
-                    <button class="button_message">liker</button>
-                </div>
-            </div>   
-            
-          
-        
+            <MessageAll />
+
             <div class="Card_message">
                 <h3 class="card_title" >Créer un message</h3>
                 <form  class="form-row" @submit="postData" method="POST">
@@ -43,8 +30,14 @@ import axios from 'axios';
 import VueAxios from 'vue-axios';
 import FromData from 'form-data';
 import MulterData from 'multer';
+import MessageAll from '@/components/MessageAll.vue'
 export default {
+   
     name: 'ReseauSocial',
+
+    components:{
+        MessageAll,
+    },
     data(){
         return {
             message:{
@@ -53,6 +46,11 @@ export default {
                 content: null,
                 likes: null,
                 userId: null,
+            },
+            messages: {
+                titlte: null,
+                content: null,
+                likes: null,
             },
         }
     },
@@ -76,16 +74,7 @@ export default {
         },
 
     },
-    mounted () {
-        axios.get('http://localhost:3000/api/message/:id', {
-            headers: {
-                Athorization: 'Bearer ' + localStorage.getItem("token")
-            }
-        })
-        .then(response => this.message = response.data)
-    },
-
-}
+};
 </script>
 
 
@@ -94,6 +83,7 @@ export default {
 .card_title{
     color: #f05454;
     margin-left: 20px;
+    margin-top: 0;
 }
 
 h1{
@@ -108,7 +98,7 @@ p{
   color: white;
 }
 #ReseauSocial{
-    padding-bottom: 25px;
+  padding-bottom: 25px;
   margin-top: 15px;
   background-color:#30475e;
   border-radius:7px;
@@ -197,7 +187,6 @@ p{
 .content_message{
     width:80%;
     border-radius:25px;
-    
     border-color: #f05454;
     margin-bottom:20px;
     -webkit-box-shadow: 5px 5px 15px 5px #000000; 

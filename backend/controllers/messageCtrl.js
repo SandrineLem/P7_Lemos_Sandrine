@@ -135,7 +135,7 @@ exports.likeMessage = (req, res, next) =>{
 
     switch (like){
         case 1 :
-        models.Message.updateOne( 
+        models.Message.update( 
             { where: { userId: userId } }, 
             { $push: { usersLiked: userId}, $inc: { likes: +1}})
         .then(() => res.status(200).jspn({ message: `Votre "like" à bien été ajouté!`}))

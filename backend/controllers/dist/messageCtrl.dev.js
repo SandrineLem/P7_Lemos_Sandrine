@@ -169,7 +169,7 @@ exports.likeMessage = function (req, res, next) {
 
   switch (like) {
     case 1:
-      models.Message.updateOne({
+      models.Message.update({
         where: {
           userId: userId
         }
