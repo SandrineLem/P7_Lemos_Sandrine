@@ -113,7 +113,7 @@ exports.login = (req, res, next) => {
                                     //données que l'on souhaite encoder
                                     { userId: user.id },
                                     //ajout du secret token via dotenv
-                                    "MON_SUPER_TOKEN_SECRET",
+                                    process.env.secret_tokenn,
                                     //expiration
                                     { expiresIn: "24h" }
                                 ),

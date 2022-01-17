@@ -118,7 +118,7 @@ exports.login = function (req, res, next) {
             {
               userId: user.id
             }, //ajout du secret token via dotenv
-            "MON_SUPER_TOKEN_SECRET", //expiration
+            process.env.secret_tokenn, //expiration
             {
               expiresIn: "24h"
             })
