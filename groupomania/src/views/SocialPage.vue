@@ -3,12 +3,10 @@
         <h1>Bienvenue sur le Reseau Social de<br>Groupomania</h1>
         
             <div class="content_message">
-                <p class="card_title">"Message de : " Justine " </p>
-                <p>"Titre du Message"</p>
-                <p>"Contenu du message "</p>
-                <div class="img_message">
-                <img src="../assets/icon-groupomania-ac.png">
-                </div>
+                <p class="card_title">"Message de : </p>
+                <p>{{message.titlte}}</p>
+                <p>{{message.content}}</p>
+                
                 <div class="form-row_conect">
                     <button class="button_message">modifier</button>
                     <button class="button_message">supprimer</button>
@@ -19,15 +17,14 @@
           
         
             <div class="Card_message">
-                <h3 class="card_title" >Envoyer un message</h3>
-                <form method="post" class="form-row">
-                    <input  type="text" class="form_row_input" placeholder="Titre du message"/>
-                    <label for="message">Ecrivez votre message :</label>
+                <h3 class="card_title" >Créer un message</h3>
+                <form  class="form-row" @submit="postData" method="POST">
+                    <input  type="text" class="form_row_input" placeholder="Titre du message" name="titlte" v-model="message.titlte"/>
+                    <label for="content" >Ecrivez votre message :</label>
 
-                    <textarea class="form_row_input_message" name="message"
-                        rows="4" cols="25">    
+                    <textarea class="form_row_input_message" name="content"
+                        rows="4" cols="25" v-model="message.content">    
                     </textarea>
-                    <input  type="file" class="form_row_input_lien"/>
                     <button type="submit" class="button_message">Envoyer</button>
                 </form>  
             </div>
@@ -41,9 +38,53 @@
 
 
 <script>
+import * as Vue from 'vue';// in Vue 3
+import axios from 'axios';
+import VueAxios from 'vue-axios';
+import FromData from 'form-data';
+import MulterData from 'multer';
 export default {
     name: 'ReseauSocial',
-    
+    data(){
+        return {
+            message:{
+                id: null,
+                titlte: null,
+                content: null,
+                likes: null,
+                userId: null,
+            },
+        }
+    },
+    methods:{
+        postData(e) {
+            e.preventDefault();
+            console.warn(this.message);
+
+            axios.post("http://localhost:3000/api/message/new", this.message, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
+            }
+            })
+            .then((result) => {
+                console.warne(result);
+                localStorage.setItem("token", result.data.token);
+                alert("Votre message à bien été envoyé !")
+                this.$router.push('/reseauSocial')
+                console.log(this.message)
+            })
+        },
+
+    },
+    mounted () {
+        axios.get('http://localhost:3000/api/message/:id', {
+            headers: {
+                Athorization: 'Bearer ' + localStorage.getItem("token")
+            }
+        })
+        .then(response => this.message = response.data)
+    },
+
 }
 </script>
 

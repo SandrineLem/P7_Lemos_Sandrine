@@ -1,11 +1,5 @@
 "use strict";
 
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
 
 /*--m'informer des erreurs 
@@ -26,18 +20,12 @@ var multer = require('multer');
 
 
 exports.allMessage = function (req, res, next) {
-  models.Message.findAll().then(function (messages) {
-    if (messages > null) {
-      res.status(200).json(messages);
-    } else {
-      res.status(404).json({
-        error: 'Pas de message à afficher !'
-      });
-    }
+  models.Message.findAll({
+    attributes: ["id", "titlte", "content", "userId", "likes"]
+  }).then(function (messages) {
+    return res.status(200).json(messages);
   })["catch"](function (error) {
-    return res.status(400).json({
-      error: error
-    });
+    return res.status(404).json(error);
   });
 };
 /* --recuperer un message id
@@ -48,20 +36,18 @@ exports.allMessage = function (req, res, next) {
 
 
 exports.getOneMessage = function (req, res, next) {
+  var id = req.params.id;
   models.Message.findOne({
-    id: req.params.id
+    attributes: ["id", "titlte", "content", "userId", "likes"],
+    where: {
+      id: id
+    }
   }).then(function (message) {
     return res.status(200).json(message);
   })["catch"](function (error) {
-    return res.status(404).json({
-      error: error
-    });
+    return res.status(404).json(error);
   });
 };
-/* --Creer un message 
-    
-*/
-
 /* --Creer un message 
     -identifier le createur du message avec l'id de l'utilisateur
     -recuperer le contenu 
@@ -71,46 +57,40 @@ exports.getOneMessage = function (req, res, next) {
 
 
 exports.createMessage = function (req, res, next) {
-  var id = req.auth.userId;
   var titlte = req.body.titlte;
-  var attachmentURL = '';
+  var attachmentURL = "";
   var userId = req.auth.userId;
   models.User.findOne({
-    attributes: ['id', 'email'],
     where: {
-      id: id
+      id: userId
     }
   }).then(function (user) {
     if (user !== null) {
       var content = req.body.content;
 
       if (req.file != undefined) {
-        attachmentURL = (_readOnlyError("attachmentURL"), "".concat(req.protocol, "://").concat(req.get('host'), "/images/").concat(req.file.filename));
+        attachmentURL = (_readOnlyError("attachmentURL"), "".concat(req.protocol, "://").concat(req.get("host"), "/images/").concat(req.file.filename));
       } else {
         attachmentURL == null;
       }
 
-      ;
-
       if (content == null) {
         res.status(400).json({
-          error: 'Aucun contenu à publier !'
+          error: "Aucun contenu à publier !"
         });
       } else {
-        models.Message.createMessage({
-          title: titlte,
+        models.Message.create({
+          titlte: titlte,
           content: content,
           attachmentURL: attachmentURL,
           likes: 0,
-          userId: userId
+          UserId: userId
         }).then(function (newMessage) {
           res.status(201).json(newMessage);
         })["catch"](function (error) {
           res.status(400).json(error);
         });
       }
-
-      ;
     } else {
       res.status(400).json(error);
     }
@@ -122,27 +102,30 @@ exports.createMessage = function (req, res, next) {
 
 
 exports.deleteMessage = function (req, res, next) {
-  Message.findOne({
-    id: req.params.id
+  var id = req.params.id;
+  var userIdMessage = req.params.userid;
+  var userId = req.auth.userId;
+  models.Message.findOne({
+    attributes: ["userId"],
+    where: {
+      id: id
+    }
   }).then(function (message) {
-    var filename = message.attachmentURL.split('/images')[1];
-    fs.unlink("images/".concat(filename), function () {
-      Message.deleteOne({
-        id: req.params.id
-      }).then(function () {
-        return res.status(200).json({
-          message: 'Message supprimé !'
-        });
-      })["catch"](function (error) {
-        return res.status(400).json({
-          error: error
-        });
+    var id = req.params.id;
+    models.Message.destroy({
+      where: {
+        id: id
+      }
+    }).then(function () {
+      return res.status(200).json({
+        message: 'Message supprimé !'
+      });
+    })["catch"](function (error) {
+      return res.status(400).json({
+        error: error
       });
     });
-  })["catch"](function (error) {
-    return res.status(500).json({
-      error: error
-    });
+    console.log('impossible de supprimer le message !');
   });
 };
 /* Modifier un message
@@ -150,14 +133,23 @@ exports.deleteMessage = function (req, res, next) {
 
 
 exports.modifyMessage = function (req, res, next) {
-  var messageObjet = req.file ? _objectSpread({}, JSON.parse(req.body.message), {
-    imageUrl: "".concat(req.protocol, "://").concat(req.get('host'), "/images/").concat(req.file.filename)
-  }) : _objectSpread({}, req.body);
-  Message.updateOne({
-    userId: params.userId
-  }, _objectSpread({}, messageObjet, {
-    id: req.params.id
-  })).then(function () {
+  //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message . 
+  var userId = req.auth.userId;
+  var id = req.body.id;
+  models.Message.findOne({
+    attributes: ["userId", "id", "titlte", "content"],
+    where: {
+      id: id
+    }
+  });
+  models.Message.update({
+    titlte: req.body.titlte,
+    content: req.body.content
+  }, {
+    where: {
+      id: id
+    }
+  }).then(function () {
     return res.status(200).json({
       message: 'Message modifié !'
     });
@@ -172,13 +164,15 @@ exports.modifyMessage = function (req, res, next) {
 
 exports.likeMessage = function (req, res, next) {
   var userId = req.auth.userId;
-  var messageId = req.params.id;
+  var id = req.body.id;
   var like = req.body.like;
 
   switch (like) {
     case 1:
-      Message.updateOne({
-        _id: messageId
+      models.Message.updateOne({
+        where: {
+          userId: userId
+        }
       }, {
         $push: {
           usersLiked: userId
@@ -188,7 +182,7 @@ exports.likeMessage = function (req, res, next) {
         }
       }).then(function () {
         return res.status(200).jspn({
-          ùessage: "Votre \"like\" \xE0 bien \xE9t\xE9 ajout\xE9!"
+          message: "Votre \"like\" \xE0 bien \xE9t\xE9 ajout\xE9!"
         });
       })["catch"](function (error) {
         return res.status(400).json({
@@ -197,12 +191,16 @@ exports.likeMessage = function (req, res, next) {
       });
 
     case 0:
-      Message.findOne({
-        _id: messageId
+      models.Message.findOne({
+        likes: req.body.likes
+      }, {
+        where: {
+          id: id
+        }
       }).then(function (message) {
         if (message.usersLiked.includes(userId)) {
-          Message.updateOne({
-            _id: messageId
+          models.Message.updateOne({
+            id: id
           }, {
             $pull: {
               usersLiked: userId

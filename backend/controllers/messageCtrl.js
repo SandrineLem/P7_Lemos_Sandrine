@@ -8,21 +8,17 @@ const fs = require('fs');
 const Message = require('../models/message');
 const multer = require('multer')
 
+
 /* --recuperer tous les messages
    -chercher tous les model de message des utilisateur avec firstname 
    - retourner tous les messages 
 */
 exports.allMessage = (req, res, next) =>{
-    models.Message.findAll()
-    .then(messages => {
-        if (messages > null){
-
-           res.status(200).json(messages) 
-        }else{
-            res.status(404).json({ error: 'Pas de message à afficher !'})
-        }
-    })
-    .catch(error =>res.status(400).json({ error }))
+    models.Message.findAll({ 
+        attributes: ["id", "titlte", "content", "userId", "likes"]
+     })
+    .then((messages) => res.status(200).json(messages))
+    .catch((error) => res.status(404).json(error));
 };
 
 /* --recuperer un message id
@@ -33,18 +29,15 @@ exports.allMessage = (req, res, next) =>{
 
 
 exports.getOneMessage = (req, res, next) =>{
-    
-    models.Message.findOne({ id: req.params.id})
-    .then(message => res.status(200).json(message))
-    .catch(error => res.status(404).json ({ error }));
+    const id = req.params.id;
+    models.Message.findOne({ 
+        attributes: ["id", "titlte", "content", "userId", "likes"],
+        where: { id: id },
+     })
+    .then((message) => res.status(200).json(message))
+    .catch((error) => res.status(404).json(error));
 };
 
-    
-
-
-/* --Creer un message 
-    
-*/
 /* --Creer un message 
     -identifier le createur du message avec l'id de l'utilisateur
     -recuperer le contenu 
@@ -52,99 +45,107 @@ exports.getOneMessage = (req, res, next) =>{
     -creer le message 
 */
 exports.createMessage = (req, res, next) => {
-    const id = req.auth.userId;
     const titlte = req.body.titlte;
-    const attachmentURL = '';
+    const attachmentURL = "";
     const userId = req.auth.userId;
 
     models.User.findOne({
-        attributes : ['id', 'email'],
-        where: {id: id }
-    })
-    .then(user =>{
-        if(user !== null){
-            const content = req.body.content;
-        if(req.file != undefined){
-            attachmentURL = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-        }
-        else{
-            attachmentURL == null
-        };
-        if((content == null )){
-            res.status(400).json({ error: 'Aucun contenu à publier !'})
-        }else{
-            models.Message.createMessage({
-                title : titlte,
-                content: content,
-                attachmentURL: attachmentURL,
-                likes: 0,
-                userId: userId,
-                
-                
-                
-            })
-            .then((newMessage) =>{
-                res.status(201).json(newMessage)
-            })
-            .catch((error) =>{
-                res.status(400).json(error)
-            })
-        };
-        }else{
-            res.status(400).json(error)
-        }
-        
-    })
-    .catch(error => res.status(500).json(error));
+            where: { id: userId },
+        })
+        .then((user) => {
+            if (user !== null) {
+                const content = req.body.content;
+                if (req.file != undefined) {
+                    attachmentURL = `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`;
+                } else {
+                    attachmentURL == null;
+                }
+                if (content == null) {
+                    res.status(400).json({ error: "Aucun contenu à publier !" });
+                } else {
+                    models.Message.create({
+                            titlte: titlte,
+                            content: content,
+                            attachmentURL: attachmentURL,
+                            likes: 0,
+                            UserId: userId,
+                        })
+                        .then((newMessage) => {
+                            res.status(201).json(newMessage);
+                        })
+                        .catch((error) => {
+                            res.status(400).json(error);
+                        });
+                }
+            } else {
+                res.status(400).json(error);
+            }
+        })
+        .catch((error) => res.status(500).json(error));
 };
 
 /*--Supprimer un message*/
 
 exports.deleteMessage = (req, res, next) => {
-    Message.findOne({ id: req.params.id })
-
-    .then(message =>{ 
-        const filename = message.attachmentURL.split('/images')[1];
-        fs.unlink(`images/${filename}`, () => {
-            Message.deleteOne({ id: req.params.id })
+    const id = req.params.id;
+    const userIdMessage = req.params.userid;
+    const userId = req.auth.userId;
+    models.Message.findOne({
+        attributes: ["userId"],
+        where: { id: id },
+     })
+    .then((message) => {
+            const id = req.params.id;
+            models.Message.destroy({
+                where: { id: id },
+            })
             .then(() => res.status(200).json({ message: 'Message supprimé !'}))
             .catch(error => res.status(400).json({ error }))
+        
+            console.log('impossible de supprimer le message !')
         })
-    })
-    .catch(error => res.status(500).json({ error }));
-};
+       };
+
 
 /* Modifier un message
  */
 
 exports.modifyMessage = (req, res, next) => {
-    const messageObjet = req.file ?
-    {
-        ...JSON.parse(req.body.message),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-
-    } : { ...req.body };
-    Message.updateOne({ userId: params.userId}, { ...messageObjet, id: req.params.id})
+    //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message . 
+    const userId = req.auth.userId;
+    const id = req.body.id;
+    models.Message.findOne({
+        attributes: ["userId", "id", "titlte", "content", ],
+        where: { id: id },
+    });
+    
+    models.Message.update({titlte: req.body.titlte, content: req.body.content},
+        { where: { id: id } })
     .then(() => res.status(200).json ({ message: 'Message modifié !'}))
-    .catch( error => res.status(400).json({ error }))
+    .catch( error => res.status(400).json({ error }))     
 };
 
 /* liker un message  */
 exports.likeMessage = (req, res, next) =>{
     const userId = req.auth.userId;
-    let messageId = req.params.id
+    let id = req.body.id
     let like = req.body.like
 
     switch (like){
         case 1 :
-        Message.updateOne({ _id: messageId }, { $push: { usersLiked: userId}, $inc: { likes: +1}})
-        .then(() => res.status(200).jspn({ ùessage: `Votre "like" à bien été ajouté!`}))
+        models.Message.updateOne( 
+            { where: { userId: userId } }, 
+            { $push: { usersLiked: userId}, $inc: { likes: +1}})
+        .then(() => res.status(200).jspn({ message: `Votre "like" à bien été ajouté!`}))
         .catch((error) => res.status(400).json ({ error }));
         case 0 :
-        Message.findOne({ _id: messageId },)
+        models.Message.findOne({likes: req.body.likes}, 
+            {where: { id: id }},)
         .then((message) => {
             if (message.usersLiked.includes(userId)){
-                Message.updateOne({ _id: messageId}, {$pull: { usersLiked: userId}, $inc: {likes: -1}})
+                models.Message.updateOne({ id: id }, {$pull: { usersLiked: userId}, $inc: {likes: -1}})
                 .then(() => { res.status(200).json({ message: `Votre "like" à déjà été prit en compte!`})})
                 .catch((error) => res.status(400).json ({ error }))
             }
