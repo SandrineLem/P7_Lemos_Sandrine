@@ -34,7 +34,6 @@ import MessageAll from '@/components/MessageAll.vue'
 export default {
    
     name: 'ReseauSocial',
-
     components:{
         MessageAll,
     },
@@ -58,7 +57,6 @@ export default {
         postData(e) {
             e.preventDefault();
             console.warn(this.message);
-
             axios.post("http://localhost:3000/api/message/new", this.message, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
@@ -68,29 +66,25 @@ export default {
                 console.warne(result);
                 localStorage.setItem("token", result.data.token);
                 alert("Votre message à bien été envoyé !")
-                this.$router.push('/reseauSocial')
+                this.$router.go('/reseauSocial')
                 console.log(this.message)
             })
         },
-
     },
 };
 </script>
 
 
 <style scoped>
-
 .card_title{
     color: #f05454;
     margin-left: 20px;
     margin-top: 0;
 }
-
 h1{
   padding-top:10px;
   color:#f05454;
 }
-
 h2{
   color:#f05454;
 }
@@ -123,8 +117,6 @@ p{
     color: black;
     margin-bottom:5px;
 }
-
-
 .form_row_input_message{
     padding: 8px;
     border: none;
@@ -196,7 +188,6 @@ p{
     width:100%;
     margin-bottom: 10px;
 }
-
 .Card_message{
     margin-top:25px;
     width:80%;
@@ -209,6 +200,4 @@ p{
     -webkit-box-shadow: 5px 5px 15px 5px #000000; 
     box-shadow: 5px 5px 15px 5px #000000;
 }
-
-
 </style>

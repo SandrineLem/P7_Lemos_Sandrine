@@ -2,15 +2,16 @@
 <div id="modifyPass">
     <form @submit="putData" method="PUT">
             
-            <div class="form-row">
-                <input type="password" placeholder="Nouveau Mot de passe" class="form_row_input" name="newPassword" v-model="user.newPassword"/>
-            </div>
+        <div class="form-row">
+            <input type="password" placeholder="Nouveau Mot de passe" class="form_row_input" name="newPassword" v-model="user.newPassword"/>
+        </div>
         <div class="card_button">    
             <div class="form-row">
                 <button class="button" type="submit" >Modifier votre mot de passe</button>
+            </div>
         </div>        
-            </div>    
-        </form>
+                
+    </form>
 </div>
 </template>
 
@@ -92,7 +93,7 @@ import MyProfil from "../views/Myprofil";
     color: black;
 }
 .button{
-  background: #f05454;
+   background: #f05454;
   color: #30475e;
   border-radius: 8px;
   font-weight: 15px;
