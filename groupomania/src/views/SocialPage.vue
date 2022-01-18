@@ -5,10 +5,10 @@
 
             <div class="Card_message">
                 <h3 class="card_title" >Créer un message</h3>
-                <form  class="form-row" @submit="postData" method="POST">
+                <form  class="form-row" @submit="postData" method="POST" @submit.prevent="onUpload">
                     <input  type="text" class="form_row_input" placeholder="Titre du message" name="titlte" v-model="message.titlte"/>
                     <label for="content" >Ecrivez votre message :</label>
-
+                    <input type="file" name="attachment" @change="onChange" class="input_file-message">
                     <textarea class="form_row_input_message" name="content"
                         rows="4" cols="25" v-model="message.content">    
                     </textarea>
@@ -21,9 +21,6 @@
 
 
 
-
-
-
 <script>
 import * as Vue from 'vue';// in Vue 3
 import axios from 'axios';
@@ -31,6 +28,7 @@ import VueAxios from 'vue-axios';
 import FromData from 'form-data';
 import MulterData from 'multer';
 import MessageAll from '@/components/MessageAll.vue'
+
 export default {
    
     name: 'ReseauSocial',
@@ -43,17 +41,33 @@ export default {
                 id: null,
                 titlte: null,
                 content: null,
+                attachment: null,
                 likes: null,
                 userId: null,
             },
             messages: {
+                id: null,
                 titlte: null,
                 content: null,
+                attachment: null, 
                 likes: null,
+                userId: null,
             },
         }
     },
     methods:{
+        onChange(event) {
+            this.attachment = event.target.files[0]
+        },
+        onUpload() {
+            const formData = new FormData()
+            formData.append('attachment', this.attachment, this.attachment.name)
+            axios.post("http://localhost:3000/api/message/multi-images-upload", formData, {
+            })
+            .then((response) => {
+                console.log(response)
+            })
+        },
         postData(e) {
             e.preventDefault();
             console.warn(this.message);
@@ -76,6 +90,10 @@ export default {
 
 
 <style scoped>
+.input_file-message{
+   font-size: 10px;
+   color: #f05454;
+}
 .card_title{
     color: #f05454;
     margin-left: 20px;
@@ -124,8 +142,7 @@ p{
     background: #e8e8e8;
     font-weight: 5000000;
     font-size: 16px;
-    flex:1;
-    max-width: 100%;
+    max-width: 75%;
     color: black;
     
 }

@@ -38,7 +38,7 @@ exports.allMessage = function (req, res, next) {
 exports.getOneMessage = function (req, res, next) {
   var id = req.params.id;
   models.Message.findOne({
-    attributes: ["id", "titlte", "content", "userId", "likes"],
+    attributes: ["id", "titlte", "content", "attachment", "userId", "likes"],
     where: {
       id: id
     }
@@ -58,7 +58,7 @@ exports.getOneMessage = function (req, res, next) {
 
 exports.createMessage = function (req, res, next) {
   var titlte = req.body.titlte;
-  var attachmentURL = "";
+  var attachment = "";
   var userId = req.auth.userId;
   models.User.findOne({
     where: {
@@ -69,9 +69,9 @@ exports.createMessage = function (req, res, next) {
       var content = req.body.content;
 
       if (req.file != undefined) {
-        attachmentURL = (_readOnlyError("attachmentURL"), "".concat(req.protocol, "://").concat(req.get("host"), "/images/").concat(req.file.filename));
+        attachment = (_readOnlyError("attachment"), "".concat(req.protocol, "://").concat(req.get("host"), "/images/").concat(req.file.filename));
       } else {
-        attachmentURL == null;
+        attachment == null;
       }
 
       if (content == null) {
@@ -82,7 +82,7 @@ exports.createMessage = function (req, res, next) {
         models.Message.create({
           titlte: titlte,
           content: content,
-          attachmentURL: attachmentURL,
+          attachment: attachment,
           likes: 0,
           UserId: userId
         }).then(function (newMessage) {
@@ -137,7 +137,7 @@ exports.modifyMessage = function (req, res, next) {
   var userId = req.auth.userId;
   var id = req.body.id;
   models.Message.findOne({
-    attributes: ["userId", "id", "titlte", "content"],
+    attributes: ["userId", "id", "titlte", "content", "attachment"],
     where: {
       id: id
     }

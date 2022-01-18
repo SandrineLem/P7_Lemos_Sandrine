@@ -8,6 +8,7 @@ console.log(error);*/
 
 //configuration multer pour les affichages images 
 const multer = require('multer');
+
 //importer fs
 const fs = require('fs');
 const dir = "./images";

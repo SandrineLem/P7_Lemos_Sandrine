@@ -6,7 +6,7 @@ console.log(error);*/
 const models = require("../models");
 const fs = require('fs');
 const Message = require('../models/message');
-const multer = require('multer')
+const multer = require('multer');
 
 
 /* --recuperer tous les messages
@@ -31,7 +31,7 @@ exports.allMessage = (req, res, next) =>{
 exports.getOneMessage = (req, res, next) =>{
     const id = req.params.id;
     models.Message.findOne({ 
-        attributes: ["id", "titlte", "content", "userId", "likes"],
+        attributes: ["id", "titlte", "content", "attachment", "userId", "likes"],
         where: { id: id },
      })
     .then((message) => res.status(200).json(message))
@@ -46,7 +46,7 @@ exports.getOneMessage = (req, res, next) =>{
 */
 exports.createMessage = (req, res, next) => {
     const titlte = req.body.titlte;
-    const attachmentURL = "";
+    const attachment = "";
     const userId = req.auth.userId;
 
     models.User.findOne({
@@ -56,11 +56,11 @@ exports.createMessage = (req, res, next) => {
             if (user !== null) {
                 const content = req.body.content;
                 if (req.file != undefined) {
-                    attachmentURL = `${req.protocol}://${req.get("host")}/images/${
+                    attachment = `${req.protocol}://${req.get("host")}/images/${
             req.file.filename
           }`;
                 } else {
-                    attachmentURL == null;
+                    attachment == null;
                 }
                 if (content == null) {
                     res.status(400).json({ error: "Aucun contenu à publier !" });
@@ -68,7 +68,7 @@ exports.createMessage = (req, res, next) => {
                     models.Message.create({
                             titlte: titlte,
                             content: content,
-                            attachmentURL: attachmentURL,
+                            attachment: attachment,
                             likes: 0,
                             UserId: userId,
                         })
@@ -117,7 +117,7 @@ exports.modifyMessage = (req, res, next) => {
     const userId = req.auth.userId;
     const id = req.body.id;
     models.Message.findOne({
-        attributes: ["userId", "id", "titlte", "content", ],
+        attributes: ["userId", "id", "titlte", "content", "attachment" ],
         where: { id: id },
     });
     
