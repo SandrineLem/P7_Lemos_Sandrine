@@ -17,6 +17,8 @@
         
   </div>
   <router-view/>
+  
+  
 </template>
 <script>
 
@@ -24,6 +26,7 @@ import Monprofil from'./components/MonProfil'
 import Formulaire from'./components/Formulaire'
 import FormulaireConnect from'./components/FormulaireConnect'
 import FormulaireModifyProfil from'./components/FormulaireModifyProfil'
+
 export default {
   name: 'App',
   data: function(){
@@ -45,9 +48,7 @@ export default {
       localStorage.removeItem("token")
       this.$router.go('/')
     }
-  }
-    
-      
+  },    
 }
 </script>
 

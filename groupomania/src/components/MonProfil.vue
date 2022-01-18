@@ -42,7 +42,6 @@ export default {
     })
     .then(response => this.user = response.data)
     },
-
      methods:{
         deletUser(){
             alert(" Votre compte à bien été supprimé ! ");

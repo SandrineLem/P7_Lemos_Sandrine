@@ -9,6 +9,7 @@
                     <p>{{message.content}}</p>
                     <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null"/>
                     <div class="form-row_conect">
+                        <button @click="switchOneMessage()" class="button_message">Voir message</button>
                         <button v-if="mode == 'authOk'" @click="putData(e)" class="button_message">modifier</button>
                         <button v-if="mode == 'authOk'" @click="deleteMessage()" class="button_message">supprimer</button>
                         <button  class="button_message">liker</button>
@@ -39,6 +40,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import SocialPage from '../views/SocialPage'
 import VueJwtDecode from "vue-jwt-decode";
+import OnePageMessage from '../views/OnePageMessage';
 
 export default {
     el:'content_message',
@@ -132,6 +134,9 @@ export default {
         modifyOk : function (){
             localStorage.getItem("token")
             
+        },
+        switchOneMessage: function (){
+            this.$router.push('/onemessage')
         },
         
     },
