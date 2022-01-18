@@ -11,6 +11,8 @@ var models = require("../models");
 var jwt = require('jsonwebtoken');
 
 var verifInput = require("../utils/InputVerifUtils");
+
+require('dotenv').config();
 /*--creation d'un utilisateur
         -verification du contenu inscrit par l'utilisateur
         -champs non vide 
@@ -47,8 +49,6 @@ exports.signup = function (req, res, next) {
         email: email
       }
     }).then(function (user) {
-      console.log(user);
-
       if (user === null) {
         bcrypt.hash(password, 10).then(function (bcryptPassword) {
           models.User.create({
@@ -91,7 +91,6 @@ exports.signup = function (req, res, next) {
 
 exports.login = function (req, res, next) {
   var email = req.body.email;
-  console.log(email);
   var password = req.body.password;
 
   if (email === null || password === null) {
@@ -106,9 +105,6 @@ exports.login = function (req, res, next) {
     }
   }).then(function (user) {
     if (user) {
-      console.log(user);
-      console.log(user.password);
-      console.log(password);
       bcrypt.compare(password, user.password, function (errrorCompPawd, resComparePassword) {
         if (resComparePassword) {
           res.status(200).json({
@@ -146,7 +142,6 @@ exports.login = function (req, res, next) {
 
 exports.userProfil = function (req, res, next) {
   var id = req.auth.userId;
-  console.log(id);
   models.User.findOne({
     attributes: ["id", "email", "username", "firstname", "isAdmin"],
     where: {
@@ -169,7 +164,6 @@ exports.userProfil = function (req, res, next) {
 exports.changeProfil = function (req, res, next) {
   var id = req.auth.userId;
   var newPassword = req.body.newPassword;
-  console.log(newPassword);
 
   if (verifInput.validPassword(newPassword)) {
     models.User.findOne({

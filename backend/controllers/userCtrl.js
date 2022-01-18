@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const models = require("../models");
 const jwt = require('jsonwebtoken');
 const verifInput = require("../utils/InputVerifUtils");
-
+require('dotenv').config();
 
 /*--creation d'un utilisateur
         -verification du contenu inscrit par l'utilisateur
@@ -50,7 +50,7 @@ exports.signup = (req, res, next) => {
                 where: { email: email },
             })
             .then((user) => {
-                console.log(user);
+                
                 if (user === null) {
                     bcrypt.hash(password, 10).then((bcryptPassword) => {
                         models.User.create({
@@ -88,7 +88,7 @@ exports.signup = (req, res, next) => {
 
 exports.login = (req, res, next) => {
     const email = req.body.email;
-    console.log(email);
+   
     const password = req.body.password;
     if (email === null || password === null) {
         res.status(400).json({ error: "Parametre manquant !" });
@@ -98,9 +98,7 @@ exports.login = (req, res, next) => {
         })
         .then((user) => {
             if (user) {
-                console.log(user);
-                console.log(user.password);
-                console.log(password);
+                
                 bcrypt.compare(
                     password,
                     user.password,
@@ -137,7 +135,7 @@ exports.login = (req, res, next) => {
 
 exports.userProfil = (req, res, next) => {
     const id = req.auth.userId;
-    console.log(id);
+    
     models.User.findOne({
             attributes: ["id", "email", "username", "firstname", "isAdmin"],
             where: { id: id },
@@ -155,7 +153,7 @@ exports.userProfil = (req, res, next) => {
 exports.changeProfil = (req, res, next) => {
     const id = req.auth.userId;
     const newPassword = req.body.newPassword;
-    console.log(newPassword);
+   
 
     if (verifInput.validPassword(newPassword)) {
         models.User.findOne({
