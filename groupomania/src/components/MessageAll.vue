@@ -10,15 +10,15 @@
                     <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null"/>
                     <div class="form-row_conect">
                         <button @click="switchOneMessage(message.id)" class="button_message">Voir message</button>
-                        <button v-if="mode == 'authOk'" @click="putData(e)" class="button_message">modifier</button>
-                        <button v-if="mode == 'authOk'" @click="deleteMessage()" class="button_message">supprimer</button>
+                        <button v-if="tokenUser.userId == message.userId" @click="putData(e)" class="button_message">modifier</button>
+                        <button v-if="tokenUser.userId == message.userId" @click="deleteMessage()" class="button_message">supprimer</button>
                         <button  class="button_message">liker</button>
                     </div>
                     <div v-if="mode == 'authOk'"  class="card_modify-message">
                         <h5>Modifier votre message</h5>
-                        <form @submit="putData" method="PUT" @submit.prevent="onUpload" >
+                        <form @submit="putData" method="POST" @submit.prevent="onUpload" >
                             <input type="text" placeholder="Nouveau Titre" class="form_row_input" name="titlte" v-model="message.titlte"/>
-                            <input type="file" name="attachment" @change="onChange">
+                            <input type="file" name="image" @change="onChange">
                             <textarea class="form_row-textarea" name="content"
                             row="4" cols="25" v-model="message.content">
                             </textarea>
@@ -49,6 +49,7 @@ export default {
             messages: [],
             message: [],
             mode: null,
+            tokenUser:{},
         }
         
     },
@@ -62,21 +63,19 @@ export default {
             .then((result) => { this.messages = result.data
             console.log(result.data)
             
+            
             let token = localStorage.getItem("token");
+
             let decoded = VueJwtDecode.decode(token);
             console.log(decoded);
-            let userIdMessage = message.lenght.userId;
-            console.log(userIdMessage);
+            
+            
 
             let userIdUser = decoded.userId;
             console.log(userIdUser);
-
-
-            if(userIdUser == userIdMessage){
-                this.mode = "authOk"
-            }else{
-                this.mode="authNo"
-            }
+            this.tokenUser = decoded; 
+            console.warn(this.tokenUser)
+        
         })
     },
     
@@ -113,8 +112,9 @@ export default {
             e.preventDefault();
             console.log(this.message);
             const formData = new FormData()
-            formData.append('attachment', this.attachment, this.attachment.name)
-            axios.put('http://localhost:3000/api/message/:id', this.message, formData, {
+            /*
+            formData.append('image', this.attachment, this.attachment.name)
+            axios.put(('http://localhost:3000/api/message/' + this.$route.params.id,, this.message, formData, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
                 },
@@ -129,7 +129,7 @@ export default {
                 alert("Votre message à été modifié avec succès !");
                 
                 
-            })    
+            })*/    
         },
         modifyOk : function (){
             localStorage.getItem("token")

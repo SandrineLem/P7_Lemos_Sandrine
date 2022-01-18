@@ -30,7 +30,7 @@ export default {
     name:'OnePageMessage',
     data () {
         return {
-            message: []
+            message:{},
         }
     },
     mounted () {
@@ -40,7 +40,8 @@ export default {
             Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
         }  
         })
-        .then(response => this.message = response.data)
+        .then(response => {this.message = response.data.proxy ; console.warn(this.message)});
+        
         
     },
 }

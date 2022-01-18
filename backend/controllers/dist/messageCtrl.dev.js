@@ -1,7 +1,5 @@
 "use strict";
 
-function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
-
 /*--m'informer des erreurs 
 var error = new Error("The error message");
 error.http_code = 404;
@@ -58,7 +56,7 @@ exports.getOneMessage = function (req, res, next) {
 
 exports.createMessage = function (req, res, next) {
   var titlte = req.body.titlte;
-  var attachment = "";
+  var attachmentURL = "";
   var userId = req.auth.userId;
   models.User.findOne({
     where: {
@@ -69,9 +67,9 @@ exports.createMessage = function (req, res, next) {
       var content = req.body.content;
 
       if (req.file != undefined) {
-        attachment = (_readOnlyError("attachment"), "".concat(req.protocol, "://").concat(req.get("host"), "/images/").concat(req.file.filename));
+        attachmentURL = "http://localhost:3000/images/" + req.file.filename;
       } else {
-        attachment == null;
+        attachmentURL == null;
       }
 
       if (content == null) {
@@ -82,7 +80,7 @@ exports.createMessage = function (req, res, next) {
         models.Message.create({
           titlte: titlte,
           content: content,
-          attachment: attachment,
+          attachment: attachmentURL,
           likes: 0,
           UserId: userId
         }).then(function (newMessage) {
@@ -135,28 +133,49 @@ exports.deleteMessage = function (req, res, next) {
 exports.modifyMessage = function (req, res, next) {
   //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message . 
   var userId = req.auth.userId;
-  var id = req.body.id;
+  var id = req.params.id;
+  var titlte = req.body.titlte;
+  var attachmentURL = "";
   models.Message.findOne({
-    attributes: ["userId", "id", "titlte", "content", "attachment"],
     where: {
       id: id
     }
-  });
-  models.Message.update({
-    titlte: req.body.titlte,
-    content: req.body.content
-  }, {
-    where: {
-      id: id
+  }).then(function (message) {
+    if (user !== null) {
+      var content = req.body.content;
+
+      if (req.file != undefined) {
+        attachmentURL = "http://localhost:3000/images/" + req.file.filename;
+      } else {
+        attachmentURL == null;
+      }
+
+      if (content == null) {
+        res.status(400).json({
+          error: "Aucun contenu à publier !"
+        });
+      } else {
+        models.Message.update({
+          titlte: titlte,
+          content: content,
+          attachment: attachmentURL,
+          likes: 0,
+          UserId: userId
+        }, {
+          where: {
+            id: id
+          }
+        }).then(function (newMessage) {
+          res.status(201).json(newMessage);
+        })["catch"](function (error) {
+          res.status(400).json(error);
+        });
+      }
+    } else {
+      res.status(400).json(error);
     }
-  }).then(function () {
-    return res.status(200).json({
-      message: 'Message modifié !'
-    });
   })["catch"](function (error) {
-    return res.status(400).json({
-      error: error
-    });
+    return res.status(500).json(error);
   });
 };
 /* liker un message  */

@@ -112,7 +112,8 @@ exports.login = function (req, res, next) {
             //--appele la fonction sign
             token: jwt.sign( //données que l'on souhaite encoder
             {
-              userId: user.id
+              userId: user.id,
+              isAdmin: user.isAdmin
             }, //ajout du secret token via dotenv
             process.env.secret_tokenn, //expiration
             {

@@ -46,7 +46,7 @@ exports.getOneMessage = (req, res, next) =>{
 */
 exports.createMessage = (req, res, next) => {
     const titlte = req.body.titlte;
-    const attachment = "";
+    let attachmentURL = "";
     const userId = req.auth.userId;
 
     models.User.findOne({
@@ -56,11 +56,9 @@ exports.createMessage = (req, res, next) => {
             if (user !== null) {
                 const content = req.body.content;
                 if (req.file != undefined) {
-                    attachment = `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`;
+                    attachmentURL = "http://localhost:3000/images/" + req.file.filename;
                 } else {
-                    attachment == null;
+                    attachmentURL == null;
                 }
                 if (content == null) {
                     res.status(400).json({ error: "Aucun contenu à publier !" });
@@ -68,7 +66,7 @@ exports.createMessage = (req, res, next) => {
                     models.Message.create({
                             titlte: titlte,
                             content: content,
-                            attachment: attachment,
+                            attachment: attachmentURL,
                             likes: 0,
                             UserId: userId,
                         })
@@ -115,16 +113,43 @@ exports.deleteMessage = (req, res, next) => {
 exports.modifyMessage = (req, res, next) => {
     //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message . 
     const userId = req.auth.userId;
-    const id = req.body.id;
+    const id = req.params.id;
+    const titlte = req.body.titlte;
+    let attachmentURL = "";
     models.Message.findOne({
-        attributes: ["userId", "id", "titlte", "content", "attachment" ],
         where: { id: id },
-    });
-    
-    models.Message.update({titlte: req.body.titlte, content: req.body.content},
-        { where: { id: id } })
-    .then(() => res.status(200).json ({ message: 'Message modifié !'}))
-    .catch( error => res.status(400).json({ error }))     
+    })
+    .then((message) => {
+        if (user !== null) {
+            const content = req.body.content;
+            if (req.file != undefined) {
+                attachmentURL = "http://localhost:3000/images/" + req.file.filename;
+            } else {
+                attachmentURL == null;
+            }
+            if (content == null) {
+                res.status(400).json({ error: "Aucun contenu à publier !" });
+            } else {
+                models.Message.update({
+                        titlte: titlte,
+                        content: content,
+                        attachment: attachmentURL,
+                        likes: 0,
+                        UserId: userId,
+                    },
+                    { where: { id: id} })
+                    .then((newMessage) => {
+                        res.status(201).json(newMessage);
+                    })
+                    .catch((error) => {
+                        res.status(400).json(error);
+                    });
+            }
+        } else {
+            res.status(400).json(error);
+        }
+    })
+    .catch((error) => res.status(500).json(error));     
 };
 
 /* liker un message  */
