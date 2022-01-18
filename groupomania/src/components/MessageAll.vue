@@ -9,7 +9,7 @@
                     <p>{{message.content}}</p>
                     <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null"/>
                     <div class="form-row_conect">
-                        <button @click="switchOneMessage()" class="button_message">Voir message</button>
+                        <button @click="switchOneMessage(message.id)" class="button_message">Voir message</button>
                         <button v-if="mode == 'authOk'" @click="putData(e)" class="button_message">modifier</button>
                         <button v-if="mode == 'authOk'" @click="deleteMessage()" class="button_message">supprimer</button>
                         <button  class="button_message">liker</button>
@@ -135,8 +135,8 @@ export default {
             localStorage.getItem("token")
             
         },
-        switchOneMessage: function (){
-            this.$router.push('/onemessage')
+        switchOneMessage: function (messageId){
+            this.$router.push({name:'OnePageMessage', params: { id: messageId }})
         },
         
     },

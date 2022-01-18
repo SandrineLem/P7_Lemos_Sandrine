@@ -41,7 +41,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/SocialPage.vue')
   },
   {
-    path: '/Onemessage',
+    path: '/Onemessage/:id',
     name: 'OnePageMessage',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
