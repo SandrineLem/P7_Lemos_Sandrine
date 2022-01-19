@@ -128,6 +128,7 @@ img{
   color: #f05454;
   margin-right:25px;
   margin-left:25px;
+  font-size: small;
 }
 #nav a:hover{
     color:#3498cb;
