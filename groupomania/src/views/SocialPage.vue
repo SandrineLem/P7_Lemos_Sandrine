@@ -133,7 +133,6 @@ p{
   display: flex;
   flex-direction: column;
   align-items: center;
-  
 }
 .form-row{
     width: 100%;

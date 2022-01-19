@@ -3,13 +3,15 @@
     <div id="OnePageMessage">
         <div >
         <button @click="switchReseauSocial()" class="button_message">Retour Reseau Social</button> 
-    </div>    
+    </div>  
+          
             <div class="content_message">
                 <h1>Votre message</h1>
-                <p class="card_title">"Message de : </p>
+                <p class="card_title">"Message de : {{}}</p>
                 <p class="card_title">{{message.titlte}}</p>
+                <img v-bind:src="message.attachment" alt="" class="img_message-One"/>
                 <p class="card_title">{{message.content}}</p>    
-                <img v-bind:src="message.attachment" alt=""/>    
+                    
             </div>
              
     </div>
@@ -50,6 +52,13 @@ export default {
 </script>
 
 <style scoped>
+.img_message-One{
+   object-fit: cover;
+   max-width: 90%;
+    border-radius: 8px;
+    max-height: 200px;
+    width: 200px;
+}
 .button_message:hover{
   color: white;
   cursor: pointer;
@@ -92,14 +101,16 @@ h1{
     width:55%;
     border-radius:25px;
     border-color: #f05454;
-    margin-bottom:20px;
     -webkit-box-shadow: 5px 5px 15px 5px #000000; 
     box-shadow: 5px 5px 15px 5px #000000;
-    overflow: scroll;
     height: 600px;
     padding-left:10px;
     padding-right:10px;
-     background-color:#30475e;
+    background-color:#30475e;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 #OnePageMessage{
   margin-top: 50px;

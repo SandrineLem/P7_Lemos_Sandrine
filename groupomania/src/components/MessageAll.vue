@@ -46,7 +46,7 @@ export default {
     data (){
         return {
             messages: [],
-            message: [],
+            message: {},
             mode: null,
             tokenUser:{},
         }
@@ -82,14 +82,14 @@ export default {
         deleteMessage(){
             let decoded = VueJwtDecode.decode(token);
             console.log(token)
-            axios.delete("http://localhost:3000/api/message/:id", {
+            axios.delete('http://localhost:3000/api/message/' + this.$route.params.id, {
                 headers: {
                     Authorization: "Bearer " + localStorage.getItem("token")
                 }
             })
             .then(() => {
                 
-                this.$router.go('/reseauSocial')
+                this.$router.push('/reseauSocial')
                 alert("Votre message à bien été supprimé !")   
             })
             .catch(error => console.log(error));
@@ -151,6 +151,8 @@ h5{
 .flex_collum{
     display: flex;
     flex-direction: collumn;
+    justify-content: center;
+    flex-wrap: wrap;
     
 }
 .title_Actualite{
@@ -166,7 +168,6 @@ h5{
   width:400px;
   height:500px;
   display:flex;
-  
   padding-top:30px;
   
 }
@@ -178,11 +179,10 @@ h5{
     border: none;
     font-family: Avenir, Helvetica, Arial, sans-serif;
     position: absolute;
+    resize: none;
 }
 .form_row_input:focus{
     background-color: #d8d8d8;
-    
-    
 }
 
 .form_row-textarea{
@@ -204,15 +204,12 @@ h5{
 }
 .form-row_conect{
     display: flex;
-   
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;  
     margin-top: 20px;
 }
 .ReseauSocial{
-  padding-right: 25px;
-  padding-left: 25px;
   padding-bottom: 20px;
   margin-top: 25px;
   margin-bottom: 25px;
@@ -224,9 +221,8 @@ h5{
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  min-width:170px;
-  resize: vertical;
-  
+  min-width:80px;
+  overflow-y: scroll;
 }
 .button_message{
     background: #f05454;
@@ -266,13 +262,13 @@ p{
     padding-bottom: 20px;
 }
 #content_message{
-    width:80%;
+    width:60%;
     border-radius:25px;
     border-color: #f05454;
     margin-bottom:20px;
     -webkit-box-shadow: 5px 5px 15px 5px #000000; 
     box-shadow: 5px 5px 15px 5px #000000;
-    overflow-x: scroll;
+    overflow-y: scroll;
     height: 600px;
     padding-left:10px;
     padding-right:10px;
