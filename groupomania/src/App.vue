@@ -15,14 +15,7 @@
       </div>    
   </div>
   <router-view/>
-  <footer id="Footer">
-      <div class="car_footer-img-p">
-        <div class="footer_img">
-          <img src="./assets/icon_small.png" class="footer_img" alt="Logo Entreprise">
-        </div>
-        <p>Reseau Social Groupomania</p>
-      </div>
-  </footer>
+  
   
 </template>
 <script>
@@ -145,7 +138,7 @@ img{
   color: #3798cb;
    border-bottom: 1px solid;
 }
-#Footer{
+#footer{
   margin-top: 20px;
   height: 55px;
   border-radius:8px;

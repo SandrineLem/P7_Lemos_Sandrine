@@ -4,7 +4,7 @@
         <div>
             <div v-for="message in messages" class="flex_collum">
                 <div class="ReseauSocial" >
-                    <p class="card_title">"Message de : </p>
+                    <p class="card_title">Message de : {{message.userId}} </p>
                     <p>{{message.titlte}}</p>
                     <p>{{message.content}}</p>
                     <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null"/>
@@ -40,15 +40,18 @@ import VueAxios from 'vue-axios'
 import SocialPage from '../views/SocialPage'
 import VueJwtDecode from "vue-jwt-decode";
 import OnePageMessage from '../views/OnePageMessage';
-
+import Monprofil from '../components/MonProfil'
 export default {
     el:'content_message',
+    
     data (){
         return {
             messages: [],
-            message: {},
+            message: [],
             mode: null,
-            tokenUser:{},
+            tokenUser:{}, 
+            isAdmin: false,
+            
         }
         
     },
@@ -61,23 +64,17 @@ export default {
         })
             .then((result) => { this.messages = result.data
             console.log(result.data)
-            
-            
             let token = localStorage.getItem("token");
-
             let decoded = VueJwtDecode.decode(token);
             console.log(decoded);
-            
-            
-
             let userIdUser = decoded.userId;
             console.log(userIdUser);
             this.tokenUser = decoded; 
             console.warn(this.tokenUser)
-        
         })
     },
-    
+        
+
     methods: {
         deleteMessage(){
             let decoded = VueJwtDecode.decode(token);
@@ -136,6 +133,10 @@ export default {
         },
         switchOneMessage: function (messageId){
             this.$router.push({name:'OnePageMessage', params: { id: messageId }})
+        },
+        updateUser(payload) {
+            this.user = payload.user
+            console.warn(user)
         },
         
     },

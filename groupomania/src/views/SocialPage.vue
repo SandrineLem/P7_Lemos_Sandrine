@@ -112,6 +112,7 @@ export default {
 }
 .card_label{
     color: #f05454;
+    font-weight : bold; 
 }
 h1{
   padding-top:10px;

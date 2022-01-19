@@ -7,7 +7,7 @@
           
             <div class="content_message">
                 <h1>Votre message</h1>
-                <p class="card_title">"Message de : {{}}</p>
+                <p class="card_title">Message de : {{ message.userId}} </p>
                 <p class="card_title">{{message.titlte}}</p>
                 <img v-bind:src="message.attachment" alt="" class="img_message-One"/>
                 <p class="card_title">{{message.content}}</p>    
