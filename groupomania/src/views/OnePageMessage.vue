@@ -39,7 +39,7 @@ export default {
             Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
         }  
         })
-        .then(response => {this.message = response.data.proxy ; console.warn(this.message)});   
+        .then(response => {this.message = response.data; console.warn(this.message)});   
     },
     methods:{
         switchReseauSocial: function (){

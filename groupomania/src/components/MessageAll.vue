@@ -1,7 +1,7 @@
 <template>
     <div id="content_message">
         
-        
+        <div>
             <div v-for="message in messages" class="flex_collum">
                 <div class="ReseauSocial" >
                     <p class="card_title">"Message de : </p>
@@ -25,8 +25,8 @@
                         </form>                    
                     </div>
                 </div>
-            </div>
-       
+            </div> 
+        </div>
     </div>      
 </template>
 
@@ -178,7 +178,6 @@ h5{
     border: none;
     font-family: Avenir, Helvetica, Arial, sans-serif;
     position: absolute;
-    
 }
 .form_row_input:focus{
     background-color: #d8d8d8;
@@ -205,9 +204,9 @@ h5{
 }
 .form-row_conect{
     display: flex;
-    
-    flex-wrap: nowrap;
-    justify-content: flex-end;
+   
+    flex-wrap: wrap;
+    justify-content: center;
     align-items: center;  
     margin-top: 20px;
 }
@@ -225,7 +224,7 @@ h5{
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  min-width:300px;
+  min-width:170px;
   resize: vertical;
   
 }
@@ -242,6 +241,7 @@ h5{
     font-size: 10px;
     height:30px;
     min-width: 75px;
+    margin-top: 10px;
 }
 .button_message:hover{
   color: white;
@@ -266,15 +266,19 @@ p{
     padding-bottom: 20px;
 }
 #content_message{
-    width:55%;
+    width:80%;
     border-radius:25px;
     border-color: #f05454;
     margin-bottom:20px;
     -webkit-box-shadow: 5px 5px 15px 5px #000000; 
     box-shadow: 5px 5px 15px 5px #000000;
-    overflow: scroll;
+    overflow-x: scroll;
     height: 600px;
     padding-left:10px;
     padding-right:10px;
+    display:flex;
+    flex-direction: collumn;
+    justify-content: center;
+    align-items: center;
 }
 </style>

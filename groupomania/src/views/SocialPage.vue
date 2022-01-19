@@ -6,12 +6,21 @@
             <div class="Card_message">
                 <h3 class="card_title" >Créer un message</h3>
                 <form  class="form-row" @submit="postData" method="POST" @submit.prevent="onUpload">
-                    <input  type="text" class="form_row_input" placeholder="Titre du message" name="titlte" v-model="message.titlte"/>
-                    <label for="content" >Ecrivez votre message :</label>
-                    <input type="file" name="attachment" @change="onChange" class="input_file-message">
-                    <textarea class="form_row_input_message" name="content"
+                    <div>
+                         <input  type="text" class="form_row_input" placeholder="Titre du message" name="titlte" v-model="message.titlte"/>
+                    </div>
+                    <div>
+                        <input type="file" name="attachment" @change="onChange" class="input_file-message">
+                    </div>
+                    <div>
+                        <label class="card_label" for="content">Ecrivez votre message :</label>
+                    </div>
+                    <div>
+                        <textarea class="form_row_input_message" name="content"
                         rows="4" cols="25" v-model="message.content">    
                     </textarea>
+                    </div>
+                    
                     <button type="submit" class="button_message">Envoyer</button>
                 </form>  
             </div>
@@ -93,11 +102,16 @@ export default {
 .input_file-message{
    font-size: 10px;
    color: #f05454;
+   margin-bottom: 10px;
+   margin-bottom: 10px; 
 }
 .card_title{
     color: #f05454;
     margin-left: 20px;
     margin-top: 0;
+}
+.card_label{
+    color: #f05454;
 }
 h1{
   padding-top:10px;
@@ -119,6 +133,7 @@ p{
   display: flex;
   flex-direction: column;
   align-items: center;
+  
 }
 .form-row{
     width: 100%;
@@ -133,7 +148,7 @@ p{
     flex:1;
     min-width: 100px;
     color: black;
-    margin-bottom:5px;
+    margin-bottom: 15px;
 }
 .form_row_input_message{
     padding: 8px;
@@ -144,6 +159,9 @@ p{
     font-size: 16px;
     max-width: 75%;
     color: black;
+    margin-top:10px;
+    margin-bottom: 10px;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     
 }
 .form_row_input_lien{
@@ -211,6 +229,7 @@ p{
     padding-top:20px;
     display:flex;
     flex-direction: collumn;
+    justify-content: center;
     flex-wrap: wrap;
     align-items: center;
     border-radius:30px;
