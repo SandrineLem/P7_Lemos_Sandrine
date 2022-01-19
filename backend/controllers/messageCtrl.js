@@ -111,45 +111,44 @@ exports.deleteMessage = (req, res, next) => {
  */
 
 exports.modifyMessage = (req, res, next) => {
-    //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message . 
+    //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message .
     const userId = req.auth.userId;
     const id = req.params.id;
     const titlte = req.body.titlte;
     let attachmentURL = "";
     models.Message.findOne({
-        where: { id: id },
-    })
-    .then((message) => {
-        if (user !== null) {
-            const content = req.body.content;
-            if (req.file != undefined) {
-                attachmentURL = "http://localhost:3000/images/" + req.file.filename;
+            where: { id: id },
+        })
+        .then((message) => {
+            if (message !== null) {
+                const content = req.body.content;
+                if (req.file != undefined) {
+                    attachmentURL = "http://localhost:3000/images/" + req.file.filename;
+                } else {
+                    attachmentURL == null;
+                }
+                if (content == null) {
+                    res.status(400).json({ error: "Aucun contenu à publier !" });
+                } else {
+                    models.Message.update({
+                            titlte: titlte,
+                            content: content,
+                            attachment: attachmentURL,
+
+                            UserId: userId,
+                        }, { where: { id: id } })
+                        .then((newMessage) => {
+                            res.status(201).json(newMessage);
+                        })
+                        .catch((error) => {
+                            res.status(400).json(error);
+                        });
+                }
             } else {
-                attachmentURL == null;
+                res.status(400).json(error);
             }
-            if (content == null) {
-                res.status(400).json({ error: "Aucun contenu à publier !" });
-            } else {
-                models.Message.update({
-                        titlte: titlte,
-                        content: content,
-                        attachment: attachmentURL,
-                        likes: 0,
-                        UserId: userId,
-                    },
-                    { where: { id: id} })
-                    .then((newMessage) => {
-                        res.status(201).json(newMessage);
-                    })
-                    .catch((error) => {
-                        res.status(400).json(error);
-                    });
-            }
-        } else {
-            res.status(400).json(error);
-        }
-    })
-    .catch((error) => res.status(500).json(error));     
+        })
+        .catch((error) => res.status(500).json(error));
 };
 
 /* liker un message  */

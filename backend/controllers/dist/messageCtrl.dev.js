@@ -131,7 +131,7 @@ exports.deleteMessage = function (req, res, next) {
 
 
 exports.modifyMessage = function (req, res, next) {
-  //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message . 
+  //Ajouter une condition pour si le id(user) == userid(message) alors il peut modifier le message .
   var userId = req.auth.userId;
   var id = req.params.id;
   var titlte = req.body.titlte;
@@ -141,7 +141,7 @@ exports.modifyMessage = function (req, res, next) {
       id: id
     }
   }).then(function (message) {
-    if (user !== null) {
+    if (message !== null) {
       var content = req.body.content;
 
       if (req.file != undefined) {
@@ -159,7 +159,6 @@ exports.modifyMessage = function (req, res, next) {
           titlte: titlte,
           content: content,
           attachment: attachmentURL,
-          likes: 0,
           UserId: userId
         }, {
           where: {
