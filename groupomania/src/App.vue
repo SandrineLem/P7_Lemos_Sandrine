@@ -12,12 +12,17 @@
       </div> 
       <div v-if="mode =='connect'">
         <button class="button_nav" @click="decoUser()">Se deconnecter</button> 
-      </div>
-        
-        
+      </div>    
   </div>
   <router-view/>
-  
+  <footer id="Footer">
+      <div class="car_footer-img-p">
+        <div class="footer_img">
+          <img src="./assets/icon_small.png" class="footer_img" alt="Logo Entreprise">
+        </div>
+        <p>Reseau Social Groupomania</p>
+      </div>
+  </footer>
   
 </template>
 <script>
@@ -111,7 +116,7 @@ img{
 }
 
 #nav {
-  height: 73px;
+  height: 75px;
   border-radius:8px;
   display: flex;
   align-content: center;
@@ -140,8 +145,39 @@ img{
   color: #3798cb;
    border-bottom: 1px solid;
 }
+#Footer{
+  margin-top: 20px;
+  height: 55px;
+  border-radius:8px;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  background-color:#30475e;
+  -webkit-box-shadow: 9px 2px 21px 1px rgba(0,0,0,0.44); 
+  box-shadow: 9px 8px 21px 1px rgba(0,0,0,0.44);
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+p{
+  text-decoration: none;
+  font-weight: bold;
+  color: #f05454;
+  margin-right:25px;
+  margin-left:25px;
+  
+}
 
-
+.footer_img{
+  max-width:65px;
+  max-height: 70px;
+  object-fit: scale-down;
+  color: #f05454;
+}
+.car_footer-img-p{
+  display:flex;
+  align-items: center;
+}
 
 
 
