@@ -1,14 +1,14 @@
 <template>
-    <div >
-        <button class="button_message">Retour Reseau Social</button> 
-    </div>
+    
     <div id="OnePageMessage">
-            
+        <div >
+        <button @click="switchReseauSocial()" class="button_message">Retour Reseau Social</button> 
+    </div>    
             <div class="content_message">
                 <h1>Votre message</h1>
                 <p class="card_title">"Message de : </p>
-                <p>{{message.titlte}}</p>
-                <p>{{message.content}}</p>    
+                <p class="card_title">{{message.titlte}}</p>
+                <p class="card_title">{{message.content}}</p>    
                 <img v-bind:src="message.attachment" alt=""/>    
             </div>
              
@@ -19,12 +19,11 @@
 
 
 <script>
-
 import * as Vue from 'vue' // in Vue 3
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueJwtDecode from "vue-jwt-decode";
-import SocialPage from '../views/SocialPage'
+import SocialPage from '../views/SocialPage';
 
 export default {
     name:'OnePageMessage',
@@ -40,17 +39,26 @@ export default {
             Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
         }  
         })
-        .then(response => {this.message = response.data.proxy ; console.warn(this.message)});
-        
-        
+        .then(response => {this.message = response.data.proxy ; console.warn(this.message)});   
     },
+    methods:{
+        switchReseauSocial: function (){
+            this.$router.push('/reseauSocial')
+        }
+    }
 }
-
-
 </script>
 
 <style scoped>
+.button_message:hover{
+  color: white;
+  cursor: pointer;
+  background: #1976d2;
+  transition: all 100ms ease-in;
+  transform: scale(0.9, 1.1);
+}
 .button_message{
+    margin-bottom:30px;
     background: #f05454;
     color: white;
     border-radius: 8px;
@@ -94,7 +102,7 @@ h1{
      background-color:#30475e;
 }
 #OnePageMessage{
-    margin-top: 50px;
+  margin-top: 50px;
   padding-top: 40px;
   padding-bottom: 50px;
   display: flex;
@@ -108,5 +116,4 @@ h1{
   border-color: #f05454;
   
 }
-
 </style>

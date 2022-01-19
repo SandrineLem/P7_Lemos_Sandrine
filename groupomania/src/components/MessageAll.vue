@@ -9,10 +9,9 @@
                     <p>{{message.content}}</p>
                     <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null"/>
                     <div class="form-row_conect">
-                        <button @click="switchOneMessage(message.id)" class="button_message">Voir message</button>
-                        <button v-if="tokenUser.userId == message.userId" @click="putData(e)" class="button_message">modifier</button>
-                        <button v-if="tokenUser.userId == message.userId" @click="deleteMessage()" class="button_message">supprimer</button>
-                        <button  class="button_message">liker</button>
+                        <div><button @click="switchOneMessage(message.id)" class="button_message">Voir message</button></div>
+                        <div><button v-if="tokenUser.userId == message.userId" @click="putData(e)" class="button_message">modifier</button></div>
+                        <div><button v-if="tokenUser.userId == message.userId" @click="deleteMessage()" class="button_message">supprimer</button></div>
                     </div>
                     <div v-if="mode == 'authOk'"  class="card_modify-message">
                         <h5>Modifier votre message</h5>
@@ -206,15 +205,18 @@ h5{
 }
 .form-row_conect{
     display: flex;
-    width:100%;
+    
     flex-wrap: nowrap;
-    justify-content: flex-start;
-    align-items:center;  
-    margin-left: 80px;
+    justify-content: flex-end;
+    align-items: center;  
+    margin-top: 20px;
 }
 .ReseauSocial{
-  padding-bottom: 30px;
-  margin-top: 15px;
+  padding-right: 25px;
+  padding-left: 25px;
+  padding-bottom: 20px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   background-color:#30475e;
   border-radius:7px;
   -webkit-box-shadow: 9px 2px 21px 1px rgba(0,0,0,0.44); 
@@ -223,8 +225,9 @@ h5{
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  width:90%;
+  min-width:300px;
   resize: vertical;
+  
 }
 .button_message{
     background: #f05454;
@@ -241,7 +244,7 @@ h5{
     min-width: 75px;
 }
 .button_message:hover{
- color: white;
+  color: white;
   cursor: pointer;
   background: #1976d2;
   transition: all 100ms ease-in;
