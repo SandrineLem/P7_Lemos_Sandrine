@@ -5,45 +5,30 @@
         <p class="card_title">"Message de :</p>
         <p>{{message.titlte}}</p>
         <p>{{message.content}}</p>
-        <img v-bind:src="message.attachment" alt v-if="message.attachment != null" />
+        <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null" />
         <div class="form-row_conect">
           <button @click="switchOneMessage(message.id)" class="button_message">Voir message</button>
-          <button
-            v-if="tokenUser.userId == message.userId"
-            @click="AfficherFormulaire(message.id)"
-            class="button_message"
-          >modifier</button>
-          <button
-            v-if="tokenUser.userId == message.userId"
-            @click="deleteMessage(message.id)"
-            class="button_message"
-          >supprimer</button>
-          <button class="button_message">liker</button>
+          <button v-if="tokenUser.userId == message.userId" @click="AfficherFormulaire(message.id)"  class="button_message-modifier">modifier</button>
+          <button v-if="tokenUser.userId == message.userId" @click="deleteMessage(message.id)" class="button_message">supprimer</button>
         </div>
-        <div v-if="messageIdShow == message.id" class="card_modify-message">
-          <h5>Modifier votre message</h5>
-          <form @submit="putData" method="POST">
-            <input
-              type="text"
-              placeholder="Nouveau Titre"
-              class="form_row_input"
-              name="titlte"
-              v-model="newMessage.titlte"
-            />
-
-            <br />
-
-            <input type="file" name="attachment" @change="onChange" class="input_file-message" />
-            <br />
-
-            <textarea
-              class="form_row-textarea"
-              name="content"
-              row="4"
-              cols="25"
-              v-model="newMessage.content"
-            ></textarea>
-            <button class="button_message" type="submit">Envoyer</button>
+        <div v-if="messageIdShow == message.id" class="card_modify-message" :class="{'open': showModify}">
+          <h5 class="card_title-modifier">Modifier votre message</h5>
+          <form class="form-row" @submit="putData" method="POST">
+            <div>
+              <input type="text" placeholder="Nouveau Titre" class="form_row_input" name="titlte" v-model="newMessage.titlte"/><br />
+            </div>
+            <div>
+              <input type="file" name="attachment" @change="onChange" class="input_file-message" /><br />
+            </div>
+            <div>
+              <label class="card_label" for="content">Ecrivez votre message :</label>
+            </div>
+            <div>
+              <textarea class="form_row-textarea" name="content" row="4" cols="25" v-model="newMessage.content"></textarea>
+            </div>
+            <div>
+              <button class="button_message" type="submit">Envoyer</button>
+            </div>
           </form>
         </div>
       </div>
@@ -75,7 +60,7 @@ export default {
         content: null,
         attachment: null
       },
-      messageIdShow: null
+      messageIdShow: null,
     };
   },
   mounted() {
@@ -150,15 +135,28 @@ export default {
 </script>
 
 <style scoped>
+
+.input_file-message {
+  font-size: 10px;
+  color: #f05454;
+  margin-bottom: 10px;
+  margin-bottom: 10px;
+  border-radius: 7px;
+  max-width:100%;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+}
+.form-row{
+  width: 100%;
+}
 h5 {
   color: #f05454;
 }
-.flex_collum {
+.flex_collum{
   display: flex;
   flex-direction: collumn;
-}
-.title_Actualite {
-  color: #f05454;
+  justify-content: center;
+  flex-wrap: wrap;
+
 }
 .scroll_allMessage {
   resize: vertical;
@@ -170,34 +168,41 @@ h5 {
   width: 400px;
   height: 500px;
   display: flex;
-
   padding-top: 30px;
 }
 .form_row_input {
-  border-radius: 8px;
-  background: #f2f2f2;
-  min-width: 150px;
-  min-height: 20px;
+  padding: 5px;
   border: none;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  position: left;
+  border-radius: 8px;
+  background: #e8e8e8;
+  font-weight: 500;
+  font-size: 12px;
+  width: 100px;
+  height:10px;
+  color: black;
+  margin-bottom: 10px;
 }
 .form_row_input:focus {
   background-color: #d8d8d8;
 }
-
+.card_label{
+  color: #f05454;
+  font-weight:bold;
+  font-size: 0.8rem;
+}
 .form_row-textarea {
-  border-radius: 8px;
-  float: left;
-  min-width: 90%;
-  min-height: 75px;
-  outline: none;
-  resize: none;
-  border: 1px solid grey;
+  padding: 8px;
   border: none;
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  border-radius: 8px;
+  background: #e8e8e8;
+  font-weight: 500;
+  font-size: 16px;
+  max-width: 75%;
+  color: black;
+  margin-top:10px;
   margin-bottom: 10px;
-  margin-top: 10px;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  resize: none;
 }
 .form_row-textarea:focus {
   background-color: #d8d8d8;
@@ -205,15 +210,15 @@ h5 {
 }
 .form-row_conect {
   display: flex;
-  width: 100%;
-  flex-wrap: nowrap;
-  justify-content: flex-start;
-  align-items: center;
-  margin-left: 80px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;  
+  margin-top: 20px;
 }
 .ReseauSocial {
-  padding-bottom: 30px;
-  margin-top: 15px;
+  padding-bottom: 20px;
+  margin-top: 25px;
+  margin-bottom: 25px;
   background-color: #30475e;
   border-radius: 7px;
   -webkit-box-shadow: 9px 2px 21px 1px rgba(0, 0, 0, 0.44);
@@ -222,8 +227,30 @@ h5 {
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  width: 90%;
-  resize: vertical;
+  min-width:80px;
+  overflow-y: scroll;
+}
+.button_message-modifier{
+  background: #f05454;
+  color: white;
+  border-radius: 8px;
+  font-weight: 15px;
+  border: none;
+  transition: 0.4s background-color;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  font-weight: bold;
+  font-size: 10px;
+  height: 30px;
+  min-width: 75px;
+  margin-bottom: 10px;
+}
+.button_message-modifier:hover{
+  color: white;
+  cursor: pointer;
+  background: #1976d2;
+  transition: all 100ms ease-in;
+  transform: scale(0.9, 1.1);
 }
 .button_message {
   background: #f05454;
@@ -238,6 +265,7 @@ h5 {
   font-size: 10px;
   height: 30px;
   min-width: 75px;
+  margin-bottom: 10px;
 }
 .button_message:hover {
   color: white;
@@ -246,29 +274,40 @@ h5 {
   transition: all 100ms ease-in;
   transform: scale(0.9, 1.1);
 }
+
 .card_title {
   color: #f05454;
+  margin-left: 20px;
+  margin-top: 0;
+}
+.card_title-modifier{
+  margin-top: 0;
+  font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 p {
   color: white;
 }
 .card_modify-message {
-  margin-top: 20px;
+  margin-top: 25px;
+  width: 88%;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: collumn;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  border-radius: 30px;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 5px 15px 5px #000000;
-  width: 88%;
-  border-radius: 25px;
-  position: relative;
-  padding-bottom: 20px;
 }
 #content_message {
-  width: 55%;
+  width: 60%;
   border-radius: 25px;
   border-color: #f05454;
   margin-bottom: 20px;
   -webkit-box-shadow: 5px 5px 15px 5px #000000;
   box-shadow: 5px 5px 15px 5px #000000;
-  overflow: scroll;
+  overflow-y: scroll;
   height: 600px;
   padding-left: 10px;
   padding-right: 10px;

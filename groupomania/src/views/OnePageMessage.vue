@@ -1,19 +1,15 @@
 <template>
     
     <div id="OnePageMessage">
-        <div >
+        <div>
         <button @click="switchReseauSocial()" class="button_message">Retour Reseau Social</button> 
-    </div>  
-          
-            <div class="content_message">
-                <h1>Votre message</h1>
-                <p class="card_title">Message de : {{ message.userId}} </p>
-                <p class="card_title">{{message.titlte}}</p>
-                <img v-bind:src="message.attachment" alt="" class="img_message-One"/>
-                <p class="card_title">{{message.content}}</p>    
-                    
-            </div>
-             
+        </div>  
+        <div class="content_message">
+            <p class="card_title">Message de : {{ message.userId}} </p>
+            <p class="card_title">{{message.titlte}}</p>
+            <img v-bind:src="message.attachment" alt="image envoyé d'un message par un utilisateur " class="img_message-One"/>
+            <p class="card_title">{{message.content}}</p>        
+        </div>  
     </div>
     
 </template>
