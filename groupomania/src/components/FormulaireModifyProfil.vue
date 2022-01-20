@@ -3,7 +3,9 @@
     <form @submit="putData" method="PUT">
             
         <div class="form-row">
+            <label for="password">Nouveau mot de passe :</label>
             <input type="password" placeholder="Nouveau Mot de passe" class="form_row_input" name="newPassword" v-model="user.newPassword"/>
+            <p class="verif-connect" v-if="user.newPassword == null">( Doit contenir 8 caractères min 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial )</p>
         </div>
         <div class="card_button">    
             <div class="form-row">
@@ -60,6 +62,10 @@ import MyProfil from "../views/Myprofil";
 </script>
 
 <style scoped>
+.verif-connect{
+  font-size: small;
+  color:; 
+}
 #modifyPass{
     align-items: center;
     display: flex;
@@ -77,9 +83,16 @@ import MyProfil from "../views/Myprofil";
 }
 .form-row{
     display: flex;
-    margin: 16px 0px;
-    gap: 16px;
+    flex-direction: column;
     flex-wrap: wrap;
+    
+}
+label{
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    color:white;
+    margin-bottom: 5px;
 }
 .form_row_input{
     padding: 8px;
@@ -88,9 +101,9 @@ import MyProfil from "../views/Myprofil";
     background: #f2f2f2;
     font-weight: 500;
     font-size: 16px;
-    flex:1;
     min-width: 100px;
-    color: black;
+    margin-top: 10px;
+    margin-bottom: 20px;
 }
 .button{
    background: #f05454;

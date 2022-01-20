@@ -2,10 +2,10 @@
   <div id="content_message">
     <div v-for="message in messages" class="flex_collum">
       <div class="ReseauSocial">
-        <p class="card_title">"Message de :</p>
+        <p class="card_title">Message de : {{message.userId}}</p>
         <p>{{message.titlte}}</p>
         <p>{{message.content}}</p>
-        <img v-bind:src="message.attachment" alt="" v-if="message.attachment != null" />
+        <img v-bind:src="message.attachment" alt="image envoyé d'un message par un utilisateur "  v-if="message.attachment != null" />
         <div class="form-row_conect">
           <button @click="switchOneMessage(message.id)" class="button_message">Voir message</button>
           <button v-if="tokenUser.userId == message.userId" @click="AfficherFormulaire(message.id)"  class="button_message-modifier">modifier</button>
@@ -58,7 +58,7 @@ export default {
       newMessage: {
         titlte: null,
         content: null,
-        attachment: null
+        attachment: null,
       },
       messageIdShow: null,
     };
@@ -278,7 +278,7 @@ h5 {
 .card_title {
   color: #f05454;
   margin-left: 20px;
-  margin-top: 0;
+  margin-top: 20px;
 }
 .card_title-modifier{
   margin-top: 0;

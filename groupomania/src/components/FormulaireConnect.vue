@@ -2,11 +2,15 @@
   <div class="card_form">
     <form @submit="postData" method="POST">
       <div class="form-row">
+        <label for="email">Email :</label>
         <input type="email" name="email" placeholder="email" class="form_row_input" v-model="user.email"/>
       </div>
+      <p class="verif-connect" v-if="user.email == null">( Doit contenir les caractères "@" " . " /<br> exemple@exemple.com/fr/net )</p>
       <div class="form-row">
+      <label for="password">Mot de passe :</label>
         <input type="password" name="password" placeholder="Mot de passe" class="form_row_input" v-model="user.password"/>
       </div>
+      <p class="verif-connect" v-if="user.password == null">( Doit contenir 8 caractères min 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial )</p>
       <div class="form-row_conect">
         <button type="submit" class="button">Se connecter</button>
       </div>
@@ -29,6 +33,7 @@ export default {
         email: null,
         password: null,
       },
+      errors:[],
     };
   },
   methods: {
@@ -40,22 +45,48 @@ export default {
           console.warn(result);
           localStorage.setItem("token", result.data.token);
           this.$router.go('/myprofil')
+
+          if (this.user.username && this.user.passaword) {
+          return true;
+          }
           alert(" Bienvenue vous allez être redirigé sur votre profil");
         })
         .catch((error) => {
           alert(" Email ou mot de passe incorrect ! ");
         })
     },
+    checkForm: function (e){
+      
+      this.errors= [];
+      if (!this.user.username) {
+        this.errors.push('Nom r')
+      }
+    }
   },
 };
 </script>
 
 <style scoped>
+form{
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+}
+label{
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    color:white;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.verif-connect{
+  font-size: small;
+}
 .card_form {
   align-items: center;
   display: flex;
   flex-direction: column;
-  
 }
 .form-row_conect{
   display: flex;
@@ -65,9 +96,9 @@ export default {
 }
 .form-row {
   display: flex;
-  margin: 16px;
-  gap: 16px;
+  flex-direction: column;
   flex-wrap: wrap;
+  justify-content: center;
 }
 .form_row_input {
   padding: 8px;
@@ -76,9 +107,7 @@ export default {
   background: #f2f2f2;
   font-weight: 500;
   font-size: 16px;
-  flex:1;
   min-width: 100px;
-  color: black;
 }
 .button {
   background: #f05454;
@@ -99,6 +128,7 @@ export default {
   font-weight: bold;
   font-size: 12px;
   height: 50px;
+  margin-right: 40px;
 }
 .button:hover {
   color: white;

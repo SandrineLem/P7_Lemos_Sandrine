@@ -1,12 +1,12 @@
 <template>
         <div id="Monprofil">
             <img src="profile_img.png">
-            <h2 >Votre Prenom :<br></h2> 
-            <h3>{{user.firstname}}</h3>
-            <h2>Votre nom :<br></h2>
-            <h3>{{user.username}}</h3>
-            <h2>Votre email :<br></h2>
-            <h3>{{user.email}}</h3>
+            <h4 >Votre Prenom :<br></h4> 
+            <p>{{user.firstname}}</p>
+            <h4>Votre nom :<br></h4>
+            <p>{{user.username}}</p>
+            <h4>Votre email :<br></h4>
+            <p>{{user.email}}</p>
             <div class="card_button">
                 <button  class="button" @click="switchSocialPage()">Acceder au reseau social Groupomania</button>
                 <button  class="button" @click="modifyPass()">Modifier mon mot de passe</button>
@@ -76,15 +76,19 @@ export default {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  margin-top:20px;
+  margin-bottom:20px;
 }
 .styleProfil{
   color:#30475e;
 }
-h3{
+p{
   color:#f05454;
+  margin-bottom: 10px;
 }
-h2{
+h4{
   color:white;
+  margin-bottom: -15px;
 }
 #Monprofil{
     display: flex;

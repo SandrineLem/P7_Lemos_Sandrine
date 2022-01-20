@@ -5,10 +5,10 @@
         <button @click="switchReseauSocial()" class="button_message">Retour Reseau Social</button> 
         </div>  
         <div class="content_message">
-            <p class="card_title">Message de : {{ message.userId}} </p>
+            <p class="card_content">Message de : {{ message.userId}} </p>
             <p class="card_title">{{message.titlte}}</p>
-            <img v-bind:src="message.attachment" alt="image envoyé d'un message par un utilisateur " class="img_message-One"/>
-            <p class="card_title">{{message.content}}</p>        
+            <img v-bind:src="message.attachment" alt="image envoyé d'un message par un utilisateur " v-if="message.attachment != null" class="img_message-One"/>
+            <p class="card_content">{{message.content}}</p>        
         </div>  
     </div>
     
@@ -28,6 +28,7 @@ export default {
     data () {
         return {
             message:{},
+            attachment: null,
         }
     },
     mounted () {
@@ -122,5 +123,8 @@ h1{
   border-radius:25px;
   border-color: #f05454;
   
+}
+.card_content{
+    color: white;
 }
 </style>

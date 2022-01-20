@@ -90,12 +90,12 @@ export default {
 .button_nav:hover{
   cursor: pointer;
   color: #3798cb; 
-  transition: transform 200ms ease-in;
-  transform: scale(0.9);
+  transition: transform 100ms ease-in;
+  transform: scale(0.8);
 }
 
 img{
-  max-width: 40%;
+  max-width: 100%;
   border-radius: 8px;
   height: 200px;
   width:200px;
@@ -166,6 +166,7 @@ p{
   max-height: 70px;
   object-fit: scale-down;
   color: #f05454;
+  margin-left: 5px;
 }
 .car_footer-img-p{
   display:flex;

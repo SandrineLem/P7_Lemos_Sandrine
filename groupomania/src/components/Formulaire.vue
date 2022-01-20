@@ -1,20 +1,28 @@
 <template>
     <div class="card_form">
-        <form @submit="postData" method="POST">
+        <form @submit="postData" method="POST" class="flex-box">
             <div class="form-row">
-                <input type="text" placeholder="Nom" class="form_row_input" name="username" v-model="user.username"/>
+                <label for="username">Nom :</label>
+                <input type="text" placeholder="Nom" id="username" class="form_row_input" name="username" v-model="user.username"/>
             </div>
+                <p class="verif-connect" v-if="user.username == null">Veuillez renseigner votre nom<br>( Attention les chiffres et les symboles sont non autorisés )</p>
             <div class="form-row">
-                <input type="text" placeholder="Prenom" class="form_row_input" name="firstname" v-model="user.firstname"/>
+                <label for="firstname">Prenom :</label>
+                <input type="text" placeholder="Prenom" id="firstname" class="form_row_input" name="firstname" v-model="user.firstname"/>
             </div>
+                <p class="verif-connect" v-if="user.firstname == null">Veuillez renseigner votre prenom<br>( Attention les chiffres et les symboles sont non autorisés )</p>
             <div class="form-row">
-                <input type="email" placeholder="email" class="form_row_input" name="email" v-model="user.email"/>
+                <label for="email">Email :</label>
+                <input type="email" placeholder="email" id="email" class="form_row_input" name="email" v-model="user.email"/>
             </div>
+            <p class="verif-connect" v-if="user.email == null">Veuillez renseigner votre email<br>( exemple@exemple.fr/com )</p>
             <div class="form-row">
-                <input type="password" placeholder="Mot de passe" class="form_row_input" name="password" v-model="user.password"/>
+                <label for="password">Mot de passe :</label>
+                <input type="password" placeholder="Mot de passe" id="password" class="form_row_input" name="password" v-model="user.password"/>
             </div>
+            <p class="verif-connect" v-if="user.password == null">Veuillez renseigner votre mot de passe<br>( 8 caractères min 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial )</p>
             <div class="form-row_conect"> 
-            <button type="submit" class="button">Créer mon compte</button> 
+            <button type="submit" class="button" value="submit">Créer mon compte</button> 
             </div>
         </form>
     </div>
@@ -49,7 +57,8 @@ import Accueil from "../views/Accueil";
                     this.$router.push('/')
                     console.log(this.user)
                 })
-                alert("Vous avez déjà un compte !");
+                
+                alert("Veuillez verifier si vous n'avez pas déjà un compte ou que les champs soient tous correctement saisie !");
                 
             }
         },
@@ -58,7 +67,15 @@ import Accueil from "../views/Accueil";
 </script>
 
 <style scoped>
-
+.verif-connect{
+  font-size: small;
+}
+.flex-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 .card_form{
   align-items: center;
   display: flex;
@@ -66,13 +83,19 @@ import Accueil from "../views/Accueil";
 }
 .form-row{
     display: flex;
-    margin: 16px 0px;
-    gap: 16px;
+    flex-direction: column;
     flex-wrap: wrap;
+}
+label{
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    color:white;
+    margin-bottom: 5px;
 }
 .form-row_conect{
   display: flex;
-  margin: 16px 0px 16px 16px;
+  
   flex-wrap: wrap;
 }
 .form_row_input{
@@ -92,7 +115,7 @@ import Accueil from "../views/Accueil";
   border-radius: 8px;
   font-weight: 15px;
   border: none;
-  width:150px;
+  width:130px;
   margin-bottom: 10px;
   padding:10px;
   transition: .4s background-color;
@@ -105,6 +128,7 @@ import Accueil from "../views/Accueil";
   font-weight: bold;
   font-size: 12px;
   height: 50px;
+  margin-right: 30px;
 }
 
 .button:hover{
@@ -112,7 +136,7 @@ import Accueil from "../views/Accueil";
   cursor: pointer;
   background: #1976d2;
   transition: all 100ms ease-in;
-    transform: scale(0.9, 1.1);
+  transform: scale(0.9, 1.1);
 }
 
 
