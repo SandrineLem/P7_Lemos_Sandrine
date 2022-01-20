@@ -11,17 +11,23 @@
           <button v-if="tokenUser.userId == message.userId" @click="AfficherFormulaire(message.id)"  class="button_message-modifier">modifier</button>
           <button v-if="tokenUser.userId == message.userId" @click="deleteMessage(message.id)" class="button_message">supprimer</button>
         </div>
-        <div v-if="messageIdShow == message.id" class="card_modify-message" :class="{'open': showModify}">
-          <h5 class="card_title-modifier">Modifier votre message</h5>
+        <div v-if="messageIdShow == message.id" class="card_modify-message" >
+          <h5 class="card_title-modifier">Que voulez vous modifier ?</h5>
           <form class="form-row" @submit="putData" method="POST">
             <div>
+              <label>Modifier le titre ?</label>
+            </div>
+            <div>
               <input type="text" placeholder="Nouveau Titre" class="form_row_input" name="titlte" v-model="newMessage.titlte"/><br />
+            </div>
+            <div>
+              <label>Modifier votre photo ?</label>
             </div>
             <div>
               <input type="file" name="attachment" @change="onChange" class="input_file-message" /><br />
             </div>
             <div>
-              <label class="card_label" for="content">Ecrivez votre message :</label>
+              <label for="content">Votre contenu ?</label>
             </div>
             <div>
               <textarea class="form_row-textarea" name="content" row="4" cols="25" v-model="newMessage.content"></textarea>
@@ -135,6 +141,14 @@ export default {
 </script>
 
 <style scoped>
+label{
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    color:white;
+    font-size: small;
+    margin-bottom: 6px;
+}
 
 .input_file-message {
   font-size: 10px;

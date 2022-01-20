@@ -1,18 +1,16 @@
 <template>
 <div id="modifyPass">
-    <form @submit="putData" method="PUT">
-            
+    <form @submit="putData" method="PUT" class="flex-box">    
         <div class="form-row">
             <label for="password">Nouveau mot de passe :</label>
             <input type="password" placeholder="Nouveau Mot de passe" class="form_row_input" name="newPassword" v-model="user.newPassword"/>
-            <p class="verif-connect" v-if="user.newPassword == null">( Doit contenir 8 caractères min 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial )</p>
+            <p class="verif-connect" v-if="user.newPassword == null">( Doit contenir 8 caractères min 1 minuscule, 1 majuscule, 1 chiffre et 1 caractère spécial )<br>"Exemple123!" </p>
         </div>
         <div class="card_button">    
             <div class="form-row">
                 <button class="button" type="submit" >Modifier votre mot de passe</button>
             </div>
-        </div>        
-                
+        </div>                 
     </form>
 </div>
 </template>

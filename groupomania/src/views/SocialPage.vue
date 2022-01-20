@@ -5,18 +5,20 @@
       <br />Groupomania
     </h1>
     <MessageAll />
-
     <div class="Card_message">
       <h3 class="card_title">Créer un message</h3>
       <form class="form-row" @submit="postData" method="POST">
+        <div class="flexCollum">
+          <label for="password">Titre :</label>
+        </div>
         <div>
           <input type="text" class="form_row_input" placeholder="Titre du message" name="titlte" v-model="message.titlte"/>
         </div>
         <div>
-          <label class="card_label" for="content">Ecrivez votre message :</label>
+          <input type="file" name="attachment" @change="onChange" class="input_file-message" />
         </div>
         <div>
-          <input type="file" name="attachment" @change="onChange" class="input_file-message" />
+          <label for="content">Ecrivez votre message :</label>
         </div>
         <div>
           <textarea class="form_row_input_message" name="content" rows="4" cols="25" v-model="message.content"></textarea>
@@ -85,6 +87,19 @@ export default {
 
 
 <style scoped>
+.flexCollum{
+  display: flex;
+  justify-content: center;
+  flex-direction: collumn;
+  align-items: center;
+}
+label{
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-weight: bold;
+    color:white;
+    margin-bottom: 6px;
+}
 .input_file-message {
   font-size: 10px;
   color: #f05454;
@@ -133,7 +148,8 @@ p {
   flex: 1;
   min-width: 100px;
   color: black;
-  margin-bottom: 15px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .form_row_input_message {
   padding: 8px;
@@ -155,7 +171,7 @@ p {
   background: #e8e8e8;
   font-weight: 500;
   font-size: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   margin-top: 20px;
   color: black;
 }
