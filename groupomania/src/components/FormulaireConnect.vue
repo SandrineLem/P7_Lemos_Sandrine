@@ -6,7 +6,6 @@
       <li class="errorsForm" v-for="e in user.error" v-bind:key="e.id">
       {{e}}
       </li>
-      <li></li>
       </ul>
     <form @submit="postData" method="POST">
       <div class="form-row">
@@ -61,40 +60,23 @@ export default {
           }          
         })
         .catch((error) => {
-
           if(!this.user.email){
-            
             this.user.error.push("Email invalide !");
-            
-
-
           }if(!this.user.passaword){
-            this.user.error.push('Mot de passe invalide !');
-             
+            this.user.error.push('Mot de passe invalide !'); 
           }
-          
           console.warn('errors',this.user.error)
-        });
-      
-      
-      /*if(!this.emailValid){
-        this.error.push("email incorrect !")
-      }
-      if(!this.passwordValid){
-        this.error.push("mot de passe incorrect !")
-      }
-      console.warn('errors',this.)
-      e.preventDefault();*/
+        });  
     },
-    
-     
-     
-    
   },
 };
 </script>
 
 <style scoped>
+.verif-connect{
+  font-size: small;
+  color: white;
+}
 .errorsForm{
   color: #f05454;
   font-weight: bold;
@@ -111,10 +93,6 @@ label{
     color:white;
     margin-bottom: 5px;
     margin-top: 5px;
-}
-.verif-connect{
-  font-size: small;
-  color: white;
 }
 .card_form {
   align-items: center;

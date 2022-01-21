@@ -1,5 +1,12 @@
 <template>
     <div class="card_form">
+        <p class="errorsForm" v-if="user.error.length"></p>
+        <b class="errorsForm" v-if="user.error.length">Veuillez corriger les erreurs suivantes :</b>
+        <ul>
+        <li class="errorsForm" v-for="e in user.error" v-bind:key="e.id">
+        {{e}}
+        </li>
+        </ul>
         <form @submit="postData" method="POST" class="flex-box">
             <div class="form-row">
                 <label for="username">Nom :</label>
@@ -41,7 +48,8 @@ import Accueil from "../views/Accueil";
                     username: null,
                     firstname: null,
                     email: null,
-                    password: null
+                    password: null,
+                    error:[],
                 },
             };
         },
@@ -53,22 +61,41 @@ import Accueil from "../views/Accueil";
                 .then((result) => {
                     console.warn(result);
                     localStorage.setItem("token", result.data.token);
-                    alert("Votre compte à été créé avec succès, vous allez être redirigé(e) sur la page de connexion !")
                     this.$router.push('/')
                     console.log(this.user)
+
+                    if (this.user.username, this.user.firstname, this.user.email && this.user.password) {
+                    return true;
+                    alert("Votre compte à été créé avec succès, vous allez être redirigé(e) sur la page de connexion !")
+                    this.error=[];
+                    }          
                 })
-                
-                alert("Veuillez verifier si vous n'avez pas déjà un compte ou que les champs soient tous correctement saisie !");
-                
+                .catch((error) =>{
+                    if(!this.user.username){
+                        this.user.error.push("Oups votre Nom est invalide !")
+                    }if(!this.user.firstname){
+                        this.user.error.push("Oups votre Prenom est invalide !")
+                    }if(!this.user.email){
+                        this.user.error.push("Oups votre Email est invalide !")
+                    }if(!this.user.password){
+                        this.user.error.push("Oups votre Mot de passe est invalide !")
+                    }
+                    console.warn('errors', this.user.error)
+                })
+                alert("Veuillez verifier si vous n'avez pas déjà un compte ou que les champs soient tous correctement saisie !");   
             }
-        },
-        
-    }
+        }, 
+    };
 </script>
 
 <style scoped>
+.errorsForm{
+  color: #f05454;
+  font-weight: bold;
+}
 .verif-connect{
   font-size: small;
+  color: white;
 }
 .flex-box{
     display: flex;
