@@ -52,7 +52,7 @@ export default {
           console.warn(result);
           localStorage.setItem("token", result.data.token);
           this.$router.go('/myprofil')
-
+          alert(" Bienvenue vous allez être redirigé(e) sur votre profil");
           if (this.user.email && this.user.password) {
             return true;
             alert(" Bienvenue vous allez être redirigé(e) sur votre profil");

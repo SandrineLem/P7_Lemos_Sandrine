@@ -63,7 +63,7 @@ import Accueil from "../views/Accueil";
                     localStorage.setItem("token", result.data.token);
                     this.$router.push('/')
                     console.log(this.user)
-
+                    alert("Votre compte à été créé avec succès, vous allez être redirigé(e) sur la page de connexion !")
                     if (this.user.username, this.user.firstname, this.user.email && this.user.password) {
                     return true;
                     alert("Votre compte à été créé avec succès, vous allez être redirigé(e) sur la page de connexion !")
