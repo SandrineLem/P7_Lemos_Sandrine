@@ -19,7 +19,7 @@ var multer = require('multer');
 
 exports.allMessage = function (req, res, next) {
   models.Message.findAll({
-    attributes: ["id", "titlte", "content", "userId", "likes"]
+    attributes: ["id", "titlte", "content", "attachment", "userId", "likes"]
   }).then(function (messages) {
     return res.status(200).json(messages);
   })["catch"](function (error) {

@@ -241,7 +241,7 @@ h5 {
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  min-width:80px;
+  min-width:315px;
   overflow-y: scroll;
 }
 .button_message-modifier{
