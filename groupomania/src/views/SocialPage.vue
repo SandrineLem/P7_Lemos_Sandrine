@@ -67,8 +67,8 @@ export default {
       formData.append("image", this.message.attachment);
       formData.append("titlte", this.message.titlte);
       formData.append("content", this.message.content);
-
-      axios
+      if(confirm("Etes vous sûre de vouloir envoyer ce message ? ")){
+        axios
         .post("http://localhost:3000/api/message/new", formData, {
           "Content-Type": "multipart/form-data",
           headers: {
@@ -80,6 +80,9 @@ export default {
           alert("Votre message à bien été envoyé !");
           this.$router.go("/reseauSocial");
         });
+      }else{
+        this.$router.go("/reseauSocial");
+      }
     }
   }
 };

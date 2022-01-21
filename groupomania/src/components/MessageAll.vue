@@ -116,7 +116,7 @@ export default {
       formData.append("image", this.newMessage.attachment);
       formData.append("titlte", this.newMessage.titlte);
       formData.append("content", this.newMessage.content);
-      if(confirm("Etes vous sûre de vouloir supprimer ce message ?")){
+      if(confirm("Etes vous sûre de vouloir modifier ce message ?")){
         axios
         .put(
           "http://localhost:3000/api/message/" + this.messageIdShow,
