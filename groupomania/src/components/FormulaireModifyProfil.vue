@@ -1,5 +1,12 @@
 <template>
 <div id="modifyPass">
+    <p class="errorsForm" v-if="user.error.length"></p>
+        <b class="errorsForm" v-if="user.error.length">Veuillez corriger les erreurs suivantes :</b>
+        <ul>
+        <li class="errorsForm" v-for="e in user.error" v-bind:key="e.id">
+        {{e}}
+        </li>
+        </ul>
     <form @submit="putData" method="PUT" class="flex-box">    
         <div class="form-row">
             <label for="password">Nouveau mot de passe :</label>
@@ -33,7 +40,8 @@ import MyProfil from "../views/Myprofil";
     data(){
         return {
             user:{
-                newPassword: null
+                newPassword: null,
+                error:[],
             },
         };
     },
@@ -51,18 +59,33 @@ import MyProfil from "../views/Myprofil";
                 localStorage.removeItem("token");
                 alert("Votre mot de passe à été modifié avec succès !");
                 this.$router.push('/')
-                
-            })    
+                if (this.user.newPassword) {
+                    return true;
+                    alert("Votre mot de passe à été modifié avec succès !");
+                    this.user.error=[];
+                } 
+            })
+            .catch((error) => {
+                if(!this.user.newPassword){
+                        this.user.error.push("Oups votre  nouveau Mot de passe est invalide !")
+                    }
+                    console.warn('errors', this.user.error)
+            }) 
+            alert("Veuillez verifier que votre nouveau mot de passe soit correctement saisie !"); 
         }
     }
-}
+};
 
 </script>
 
 <style scoped>
+.errorsForm{
+  color: #f05454;
+  font-weight: bold;
+}
 .verif-connect{
   font-size: small;
-  color:; 
+  color: white; 
 }
 #modifyPass{
     align-items: center;
