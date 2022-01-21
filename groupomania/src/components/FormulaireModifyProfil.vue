@@ -49,7 +49,8 @@ import MyProfil from "../views/Myprofil";
         putData(e){
             e.preventDefault();
             console.log(this.user);
-            axios.put('http://localhost:3000/api/user/updateProfil', this.user, {
+            if(confirm("Confirmez vous la modification de votre mot de passe ?")){
+                axios.put('http://localhost:3000/api/user/updateProfil', this.user, {
             headers: {
                 Authorization: 'Bearer ' + localStorage.getItem("token")//the token is a variable which holds the token
                 }
@@ -71,7 +72,10 @@ import MyProfil from "../views/Myprofil";
                     }
                     console.warn('errors', this.user.error)
             }) 
-            alert("Veuillez verifier que votre nouveau mot de passe soit correctement saisie !"); 
+            alert("Veuillez verifier que votre nouveau mot de passe soit correctement saisie !");
+            }else{
+                this.$router.go('/myprofil')
+            }     
         }
     }
 };

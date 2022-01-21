@@ -44,6 +44,8 @@ export default {
     },
      methods:{
         deletUser(){
+          if(confirm("Etes vous sûre de vouloir supprimer votre compte ?")){
+            
             alert(" Votre compte à bien été supprimé ! ");
             axios.delete("http://localhost:3000/api/user/deleteProfil", {
           headers: {
@@ -53,11 +55,12 @@ export default {
         .then(() => {
           localStorage.clear();
           this.$router.push('/inscription')
-          
         })
         .catch(error => console.log(error));
+          }else{
+            this.$router.go('/myprofil')
+          }    
         },
-
         modifyPass: function(){
             this.$store.commit('UpdateProfil')
             this.$router.push('/updateProfil')
@@ -65,8 +68,7 @@ export default {
         switchSocialPage: function(){
           this.$router.push('/reseauSocial')
         }
-    },
-    
+    },  
 }
 
 </script>

@@ -89,7 +89,8 @@ export default {
       this.messageIdShow = messageId;
     },
     deleteMessage(messageId) {
-      axios
+      if(confirm("Etes vous sûre de vouloir supprimer ce message ?")){ 
+        axios
         .delete("http://localhost:3000/api/message/" + messageId, {
           headers: {
             Authorization: "Bearer " + localStorage.getItem("token")
@@ -100,6 +101,9 @@ export default {
           this.$router.go("/reseauSocial");
         })
         .catch(error => console.log(error));
+      }else{
+        this.$router.go("/reseauSocial");
+      } 
     },
     onChange(event) {
       this.newMessage.attachment = event.target.files[0];
@@ -112,8 +116,8 @@ export default {
       formData.append("image", this.newMessage.attachment);
       formData.append("titlte", this.newMessage.titlte);
       formData.append("content", this.newMessage.content);
-
-      axios
+      if(confirm("Etes vous sûre de vouloir supprimer ce message ?")){
+        axios
         .put(
           "http://localhost:3000/api/message/" + this.messageIdShow,
           formData,
@@ -129,6 +133,9 @@ export default {
           alert("Votre message à bien été envoyé !");
           this.$router.go("/reseauSocial");
         });
+      }else{
+        this.$router.go("/reseauSocial");
+      }
     },
     modifyOk: function() {
       localStorage.getItem("token");
