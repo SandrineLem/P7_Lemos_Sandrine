@@ -1,5 +1,13 @@
 <template>
   <div class="card_form">
+    <p class="errorsForm" v-if="user.error.length"></p>
+      <b class="errorsForm" v-if="user.error.length">Veuillez corriger les erreurs suivantes :</b>
+      <ul>
+      <li class="errorsForm" v-for="e in user.error" v-bind:key="e.id">
+      {{e}}
+      </li>
+      <li></li>
+      </ul>
     <form @submit="postData" method="POST">
       <div class="form-row">
         <label for="email">Email :</label>
@@ -32,8 +40,8 @@ export default {
       user: {
         email: null,
         password: null,
+        error:[],
       },
-      errors:[],
     };
   },
   methods: {
@@ -46,27 +54,51 @@ export default {
           localStorage.setItem("token", result.data.token);
           this.$router.go('/myprofil')
 
-          if (this.user.username && this.user.passaword) {
-          return true;
-          }
-          alert(" Bienvenue vous allez être redirigé sur votre profil");
+          if (this.user.email && this.user.password) {
+            return true;
+            alert(" Bienvenue vous allez être redirigé(e) sur votre profil");
+            this.error=[];
+          }          
         })
         .catch((error) => {
-          alert(" Email ou mot de passe incorrect ! ");
-        })
-    },
-    checkForm: function (e){
+
+          if(!this.user.email){
+            
+            this.user.error.push("Email invalide !");
+            
+
+
+          }if(!this.user.passaword){
+            this.user.error.push('Mot de passe invalide !');
+             
+          }
+          
+          console.warn('errors',this.user.error)
+        });
       
-      this.errors= [];
-      if (!this.user.username) {
-        this.errors.push('Nom r')
+      
+      /*if(!this.emailValid){
+        this.error.push("email incorrect !")
       }
-    }
+      if(!this.passwordValid){
+        this.error.push("mot de passe incorrect !")
+      }
+      console.warn('errors',this.)
+      e.preventDefault();*/
+    },
+    
+     
+     
+    
   },
 };
 </script>
 
 <style scoped>
+.errorsForm{
+  color: #f05454;
+  font-weight: bold;
+}
 form{
   display:flex;
   flex-direction: column;
@@ -82,6 +114,7 @@ label{
 }
 .verif-connect{
   font-size: small;
+  color: white;
 }
 .card_form {
   align-items: center;
