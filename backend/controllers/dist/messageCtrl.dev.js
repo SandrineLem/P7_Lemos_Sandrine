@@ -177,23 +177,27 @@ exports.modifyMessage = function (req, res, next) {
     return res.status(500).json(error);
   });
 };
-/* liker un message  */
+/* liker un message 
+--------A PREVOIR POUR LA FONCTIONNALITE DES LIKES DES UTILISATEURS-----
+ Ajouter une nouvelle tab de liaison dans la base de donnée  pour faire un tableau et inclure les utilisateurs qui like un message 
+pour ensuite faire une condition si meme utilisateur like le meme message j'enlève un pour annuler le like. 
+------Code en attente de progression ----*/
 
 
 exports.likeMessage = function (req, res, next) {
   var userId = req.auth.userId;
-  var id = req.body.id;
-  var like = req.body.like;
+  var id = req.params.id;
+  var likes = req.body.likes; //userLiked...
 
-  switch (like) {
+  switch (likes) {
     case 1:
       models.Message.update({
         where: {
-          userId: userId
+          id: id
         }
       }, {
         $push: {
-          usersLiked: userId
+          userId: userId
         },
         $inc: {
           likes: +1
@@ -207,21 +211,22 @@ exports.likeMessage = function (req, res, next) {
           error: error
         });
       });
+      break;
 
     case 0:
       models.Message.findOne({
-        likes: req.body.likes
-      }, {
+        attributes: ["userId", "likes"],
         where: {
           id: id
         }
       }).then(function (message) {
-        if (message.usersLiked.includes(userId)) {
+        //attente d'ajout d'un tableau userLiked Array []...
+        if (message.userId.includes(userLiked)) {
           models.Message.updateOne({
             id: id
           }, {
             $pull: {
-              usersLiked: userId
+              id: id
             },
             $inc: {
               likes: -1

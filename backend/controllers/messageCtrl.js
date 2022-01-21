@@ -134,7 +134,6 @@ exports.modifyMessage = (req, res, next) => {
                             titlte: titlte,
                             content: content,
                             attachment: attachmentURL,
-
                             UserId: userId,
                         }, { where: { id: id } })
                         .then((newMessage) => {
@@ -151,25 +150,36 @@ exports.modifyMessage = (req, res, next) => {
         .catch((error) => res.status(500).json(error));
 };
 
-/* liker un message  */
+/* liker un message 
+--------A PREVOIR POUR LA FONCTIONNALITE DES LIKES DES UTILISATEURS-----
+ Ajouter une nouvelle tab de liaison dans la base de donnée  pour faire un tableau et inclure les utilisateurs qui like un message 
+pour ensuite faire une condition si meme utilisateur like le meme message j'enlève un pour annuler le like. 
+------Code en attente de progression ----*/
+
+
 exports.likeMessage = (req, res, next) =>{
     const userId = req.auth.userId;
-    let id = req.body.id
-    let like = req.body.like
-
-    switch (like){
+    let id = req.params.id;
+    let likes = req.body.likes;
+    //userLiked...
+    switch (likes){
         case 1 :
-        models.Message.update( 
-            { where: { userId: userId } }, 
-            { $push: { usersLiked: userId}, $inc: { likes: +1}})
+        models.Message.update({
+             where: { id: id } }, 
+            { $push: { userId: userId }, $inc: { likes: +1 }})
         .then(() => res.status(200).jspn({ message: `Votre "like" à bien été ajouté!`}))
         .catch((error) => res.status(400).json ({ error }));
+            break;
         case 0 :
-        models.Message.findOne({likes: req.body.likes}, 
-            {where: { id: id }},)
+        models.Message.findOne({
+            attributes: ["userId", "likes"],
+            where: { id: id },
+        })
+            
         .then((message) => {
-            if (message.usersLiked.includes(userId)){
-                models.Message.updateOne({ id: id }, {$pull: { usersLiked: userId}, $inc: {likes: -1}})
+            //attente d'ajout d'un tableau userLiked Array []...
+            if (message.userId.includes(userLiked)){
+                models.Message.updateOne({ id: id }, {$pull: { id: id}, $inc: {likes: -1}})
                 .then(() => { res.status(200).json({ message: `Votre "like" à déjà été prit en compte!`})})
                 .catch((error) => res.status(400).json ({ error }))
             }
