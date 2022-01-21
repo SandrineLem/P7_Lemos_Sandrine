@@ -251,4 +251,54 @@ exports.deleteProfil = function (req, res) {
       error: "Ce compte ne peut être supprimé, veuillez contacter un administrateur"
     });
   }
+}; //-----Fonctionnalité à deployer ----
+
+/*Ajout de paramètre d'un utilisateur Admin pour authorisation de suppression d'un compte */
+
+
+exports.deleteAdminUser = function (req, res, next) {
+  var id = req.auth.userId;
+  var isAdmin = req.params.isAdmin;
+
+  if (isAdmin != false) {
+    models.User.findOne({
+      where: {
+        id: id
+      },
+      attributes: ["id", "isAdmin"]
+    }).then(function (isAdmin) {
+      if (isAdmin != false) {
+        models.Message.destroy({
+          where: {
+            userId: id
+          }
+        }).then(function () {
+          console.log('Tous les messages de cet utilisateur sont supprimés !');
+          models.User.destroy({
+            where: {
+              id: id
+            }
+          }).then(function () {
+            return res.end();
+          })["catch"](function (error) {
+            return console.log(error);
+          });
+        })["catch"](function (error) {
+          return res.status(500).json(error);
+        });
+      } else {
+        res.status(401).json({
+          error: "Seul un Administrateur peut supprimer ce compte !"
+        });
+      }
+    })["catch"](function (error) {
+      res.status(401).json({
+        error: error
+      });
+    });
+  } else {
+    res.status(401).json({
+      message: " unauthorized "
+    });
+  }
 };

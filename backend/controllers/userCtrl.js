@@ -225,3 +225,37 @@ exports.deleteProfil = (req, res) => {
         });
     }
 };
+//-----Fonctionnalité à deployer ----
+/*Ajout de paramètre d'un utilisateur Admin pour authorisation de suppression d'un compte */
+exports.deleteAdminUser = (req, res, next) =>{
+    const id = req.auth.userId;
+    const isAdmin = req.params.isAdmin;
+    if(isAdmin != false) {
+        models.User.findOne({
+            where: { id: id },
+            attributes: ["id", "isAdmin"],
+        }).then((isAdmin) => {
+            if (isAdmin != false){
+                models.Message.destroy({
+                    where: { userId: id },
+                })
+                .then(()=>{
+                    console.log('Tous les messages de cet utilisateur sont supprimés !');
+                    models.User.destroy({
+                        where: { id: id },    
+                    })
+                    .then(() => res.end())
+                    .catch((error) => console.log(error));
+                })
+                .catch((error) => res.status(500).json(error));
+            }else{
+                res.status(401).json({ error : "Seul un Administrateur peut supprimer ce compte !"})
+            }
+        })
+        .catch((error) => {
+            res.status(401).json({ error })
+        })
+    }else{
+        res.status(401).json({message : " unauthorized "})
+    }
+};
