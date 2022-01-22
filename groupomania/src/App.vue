@@ -66,7 +66,8 @@ export default {
   transition: transform 0.8s 0s ease in out;
 }
 .button_nav{
-  margin-left:5px;
+  margin-right: 25px;
+ 
   margin-top:9px;
   background: #30475e;
   color:#f05454;
@@ -75,7 +76,7 @@ export default {
   border: none;
   width:100%;
   margin-bottom: 10px;
-  padding: 16px;
+  padding: 10px;
   transition: .4s background-color;
   display: flex;
   flex-direction: columns;
