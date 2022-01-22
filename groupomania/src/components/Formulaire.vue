@@ -81,8 +81,9 @@ import Accueil from "../views/Accueil";
                         this.user.error.push("Oups votre Mot de passe est invalide !")
                     }
                     console.warn('errors', this.user.error)
+                     alert("Veuillez verifier si vous n'avez pas déjà un compte ou que les champs soient tous correctement saisie !"); 
                 })
-                alert("Veuillez verifier si vous n'avez pas déjà un compte ou que les champs soient tous correctement saisie !");   
+                 
             }
         }, 
     };
@@ -156,6 +157,7 @@ label{
   font-size: 12px;
   height: 50px;
   margin-right: 30px;
+  margin-top: 20px;
 }
 
 .button:hover{

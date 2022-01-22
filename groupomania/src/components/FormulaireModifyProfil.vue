@@ -71,10 +71,11 @@ import MyProfil from "../views/Myprofil";
                         this.user.error.push("Oups votre  nouveau Mot de passe est invalide !")
                     }
                     console.warn('errors', this.user.error)
+                    alert("Veuillez verifier que votre nouveau mot de passe soit correctement saisie !");
             }) 
-            alert("Veuillez verifier que votre nouveau mot de passe soit correctement saisie !");
             }else{
-                this.$router.go('/myprofil')
+
+                this.$router.go('/')
             }     
         }
     }

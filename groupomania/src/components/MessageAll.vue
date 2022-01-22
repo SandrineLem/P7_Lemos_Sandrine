@@ -98,7 +98,6 @@ export default {
       let userIsAdmin = decoded.isAdmin;
       console.log(userIsAdmin)
     if(confirm("Etes vous sûre de vouloir supprimer ce message ?")){
-      if(userIsAdmin == true){
         axios
         .delete("http://localhost:3000/api/message/" + messageId, {
           headers: {
@@ -110,13 +109,9 @@ export default {
           this.$router.go("/reseauSocial");
         })
         .catch(error => console.log(error));
-      }else{
-        this.$router.go("/reseauSocial");
-      } 
     }else{
         this.$router.go("/reseauSocial");
-      };
-        
+      }; 
     },
     onChange(event) {
       this.newMessage.attachment = event.target.files[0];
