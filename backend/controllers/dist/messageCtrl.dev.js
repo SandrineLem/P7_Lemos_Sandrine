@@ -124,6 +124,47 @@ exports.deleteMessage = function (req, res, next) {
       });
     });
     console.log('impossible de supprimer le message !');
+  })["catch"](function (error) {
+    return res.status(400).json({
+      error: error
+    });
+  });
+  console.log('impossible de supprimer le message !');
+};
+/*---supprimer un message avec un utilisateur Admin  A developper ....*/
+
+
+exports.deleteAdminMessage = function (req, res, next) {
+  var id = req.auth.userId;
+  models.User.findOne({
+    where: {
+      id: id
+    },
+    attributes: ["Id", "isAdmin"]
+  }).then(function (user) {
+    var userAdmin = user.isAdmin;
+    console.log(userAdmin);
+    var userIsAdmin = req.params.isAdmin;
+
+    if (userIsAdmin != false) {
+      models.Message.destroy({
+        where: {
+          id: id
+        }
+      }).then(function () {
+        return res.status(200).json({
+          message: 'Message supprimé !'
+        });
+      })["catch"](function (error) {
+        return res.status(401).json({
+          error: "Seul un administrateur peut effectuer cette requete !"
+        });
+      });
+    }
+  })["catch"](function (error) {
+    return res.status(401).json({
+      error: " unauthorized !"
+    });
   });
 };
 /* Modifier un message

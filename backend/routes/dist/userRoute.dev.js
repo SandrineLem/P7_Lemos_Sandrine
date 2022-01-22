@@ -14,4 +14,5 @@ router.post("/login", userCtrl.login);
 router.get("/myprofil", auth, userCtrl.userProfil);
 router["delete"]("/deleteProfil", auth, userCtrl.deleteProfil);
 router.put("/updateProfil", auth, userCtrl.changeProfil);
+router["delete"]("/deleteProfil", auth, userCtrl.deleteAdminUser);
 module.exports = router;

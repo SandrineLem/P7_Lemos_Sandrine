@@ -21,4 +21,5 @@ router.post("/new", auth, multer, messageCtrl.createMessage);
 router.put("/:id", auth, multer, messageCtrl.modifyMessage);
 router["delete"]("/:id", auth, messageCtrl.deleteMessage);
 router.post("/:id/like", auth, messageCtrl.likeMessage);
+router["delete"]("/:id", auth, messageCtrl.deleteAdminMessage);
 module.exports = router;

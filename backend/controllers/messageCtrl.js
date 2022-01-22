@@ -104,8 +104,32 @@ exports.deleteMessage = (req, res, next) => {
         
             console.log('impossible de supprimer le message !')
         })
-       };
-
+    .catch(error => res.status(400).json({ error }))
+        console.log('impossible de supprimer le message !')
+};
+/*---supprimer un message avec un utilisateur Admin  A developper ....*/
+exports.deleteAdminMessage = (req, res, next) =>{
+    const id = req.auth.userId;
+    
+    
+        models.User.findOne({
+            where: { id: id },
+            attributes: ["Id", "isAdmin"]
+        })
+        .then((user) =>{
+            const userAdmin = user.isAdmin;
+            console.log(userAdmin)
+            const userIsAdmin = req.params.isAdmin;
+            if(userIsAdmin != false){
+                models.Message.destroy({
+                    where: { id: id },
+                })
+                .then(() => res.status(200).json({message: 'Message supprimé !'}))
+                .catch(error => res.status(401).json({ error : "Seul un administrateur peut effectuer cette requete !"}))
+            }
+        })
+        .catch(error => res.status(401).json({ error : " unauthorized !"}))
+}
 
 /* Modifier un message
  */

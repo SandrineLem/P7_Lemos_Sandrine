@@ -67,6 +67,7 @@ export default {
         attachment: null,
       },
       messageIdShow: null,
+      userIsAdmin: false,
     };
   },
   mounted() {
@@ -87,9 +88,17 @@ export default {
   methods: {
     AfficherFormulaire(messageId) {
       this.messageIdShow = messageId;
+      
     },
+    
     deleteMessage(messageId) {
-      if(confirm("Etes vous sûre de vouloir supprimer ce message ?")){ 
+      let token = localStorage.getItem("token");
+      let decoded = VueJwtDecode.decode(token);
+      let userId= decoded.userId;
+      let userIsAdmin = decoded.isAdmin;
+      console.log(userIsAdmin)
+    if(confirm("Etes vous sûre de vouloir supprimer ce message ?")){
+      if(userIsAdmin == true){
         axios
         .delete("http://localhost:3000/api/message/" + messageId, {
           headers: {
@@ -104,6 +113,10 @@ export default {
       }else{
         this.$router.go("/reseauSocial");
       } 
+    }else{
+        this.$router.go("/reseauSocial");
+      };
+        
     },
     onChange(event) {
       this.newMessage.attachment = event.target.files[0];
@@ -248,7 +261,7 @@ h5 {
   flex-direction: column;
   align-items: center;
   margin-bottom: 30px;
-  min-width:315px;
+  min-width: 230px;
   overflow-y: scroll;
 }
 .button_message-modifier{
@@ -322,7 +335,7 @@ p {
   box-shadow: 5px 5px 15px 5px #000000;
 }
 #content_message {
-  width: 60%;
+  width: 80%;
   border-radius: 25px;
   border-color: #f05454;
   margin-bottom: 20px;
